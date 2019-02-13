@@ -1,7 +1,6 @@
 package org.jahia.test.glue;
 
 import org.jahia.test.data.RestApiRtVariables;
-import org.jahia.test.data.TestGlobalConfiguration;
 import org.jahia.test.data.TestRtVariables;
 import org.jahia.test.utils.Util;
 import org.slf4j.Logger;
@@ -23,46 +22,7 @@ public class FrameworkSteps
 		// setting default values for each scenario, further steps in the scenario might change them
 		TestRtVariables.init();
 		RestApiRtVariables.init();
-
-		skipCurrentContextOnTag(s);
-
 		TestRtVariables.browserStackTestName = s.getName();
-	}
-
-	// current context (= cuke runner) + should be retrieved dynamically instead of trying all
-	// context and tags but I'll let it like this for now
-	private void skipCurrentContextOnTag(Scenario s)
-	{
-		skipGivenContextOnTag(s, "browser", "IE", "@noIe");
-		skipGivenContextOnTag(s, "browser", "safari", "@noSafari");
-		skipGivenContextOnTag(s, "browser", "firefox", "@noFirefox");
-		skipGivenContextOnTag(s, "platform", "ANDROID", "@noAndroid");
-
-		// necessary to skip anthracite tagged tests if required
-		if (s.getSourceTagNames().contains("@anthracite")
-				&& TestGlobalConfiguration.getSkipAnthraciteTests())
-			throw new cucumber.api.PendingException(String.format(
-					"Detected @anthracite tag but selenium.skip.anthracite.tests is true. Skipping %s",
-					s.getName()));
-	}
-
-	private void skipGivenContextOnTag(Scenario s, String contextType, String contextPropValue,
-			String tagToIgnore)
-	{
-		if (contextType.equals("browser"))
-		{
-			if (TestGlobalConfiguration.getCapBrowser().equals(contextPropValue)
-					&& s.getSourceTagNames().contains(tagToIgnore))
-				throw new cucumber.api.PendingException(
-						String.format("Detected %s tag. Skipping %s", tagToIgnore, s.getName()));
-		}
-		else if (contextType.equals("platform"))
-		{
-			if (TestGlobalConfiguration.getCapPlatform().equals(contextPropValue)
-					&& s.getSourceTagNames().contains(tagToIgnore))
-				throw new cucumber.api.PendingException(
-						String.format("Detected %s tag. Skipping %s", tagToIgnore, s.getName()));
-		}
 	}
 
 	@After

@@ -76,7 +76,7 @@ public class Util
 			if (!directory.exists())
 				directory.mkdirs();
 
-			File file = new File(TestGlobalConfiguration.getDownloadsPath() + fileName);
+			File file = new File(TestGlobalConfiguration.getLogsDirectory() + fileName);
 			FileUtils.writeByteArrayToFile(file, byteArray);
 			TestRtVariables.lastDownloadedFile = file;
 		}

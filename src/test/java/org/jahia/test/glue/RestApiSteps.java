@@ -69,7 +69,7 @@ public class RestApiSteps
 		if (!page.equals("home"))
 			page = "home/" + page;
 
-		response = given().relaxedHTTPSValidation().filter(new ResponseLoggingFilter())
+		response = given().relaxedHTTPSValidation().log().all().filter(new ResponseLoggingFilter())
 				.contentType("application/json").get(TestGlobalConfiguration.getBaseUrl()
 						+ "/sites/JahiaMfIntegTests/" + page + ".html");
 	}
