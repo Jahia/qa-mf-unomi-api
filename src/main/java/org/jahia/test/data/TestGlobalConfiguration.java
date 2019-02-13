@@ -1,8 +1,6 @@
 package org.jahia.test.data;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Selenium tests global configuration Looks for a property from jahia
@@ -11,8 +9,6 @@ import org.slf4j.LoggerFactory;
  */
 public class TestGlobalConfiguration
 {
-
-	private static final Logger logger = LoggerFactory.getLogger(TestGlobalConfiguration.class);
 
 	/** The default Jahia host. */
 	private static String defaultJahiaHost = "localhost";
@@ -39,6 +35,10 @@ public class TestGlobalConfiguration
 	private static String defaultTestLanguage = "en_US";
 
 	private static String defaultLogsDirectory = "target/logs";
+
+	private static boolean defaultLogErrorsOnly = false;
+
+	private static String defaultUnomiKey = "670c26d1cc413346c3b2fd9ce65dab41";
 
 	/**
 	 * Gets the property value.
@@ -181,6 +181,16 @@ public class TestGlobalConfiguration
 	}
 
 	/**
+	 * Gets the unomi key.
+	 *
+	 * @return the unomi key
+	 */
+	public static String getUnomiKey()
+	{
+		return getPropertyValue("unomi.key", defaultUnomiKey);
+	}
+
+	/**
 	 * Gets the jahia context. Adds a / prefix if missing
 	 *
 	 * @return the jahia context
@@ -198,6 +208,11 @@ public class TestGlobalConfiguration
 	public static String getLogsDirectory()
 	{
 		return getPropertyValue("logs.directory", defaultLogsDirectory);
+	}
+
+	public static boolean getLogErrorsOnly()
+	{
+		return getPropertyValue("log.errors.only", defaultLogErrorsOnly);
 	}
 
 	/**

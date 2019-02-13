@@ -1,6 +1,5 @@
 package org.jahia.test.glue;
 
-import org.jahia.test.data.RestApiRtVariables;
 import org.jahia.test.data.TestRtVariables;
 import org.jahia.test.utils.Util;
 import org.slf4j.Logger;
@@ -19,10 +18,9 @@ public class FrameworkSteps
 	@Before
 	public void before(Scenario s)
 	{
-		// setting default values for each scenario, further steps in the scenario might change them
-		TestRtVariables.init();
-		RestApiRtVariables.init();
-		TestRtVariables.browserStackTestName = s.getName();
+		// reset default values for each scenario further steps in the scenario might change them
+		TestRtVariables.reset();
+		TestRtVariables.scenarioName = s.getName();
 	}
 
 	@After

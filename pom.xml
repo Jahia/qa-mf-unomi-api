@@ -26,6 +26,7 @@
         <jahia.context></jahia.context>
         <jahia.branch></jahia.branch>
         <logs.directory>${project.build.directory}/logs</logs.directory>
+        <log.errors.only>false</log.errors.only>
         <testOutputDirectory>${project.build.directory}/testng-results</testOutputDirectory>
     </properties>
 
@@ -163,6 +164,7 @@
                         <jahia.port>${jahia.port}</jahia.port>
                         <jahia.context>${jahia.context}</jahia.context>
                         <logs.directory>${logs.directory}</logs.directory>
+                        <log.errors.only>${log.errors.only}</log.errors.only>
                         <testOutputDirectory>${testOutputDirectory}</testOutputDirectory>
                     </systemPropertyVariables>
                     <preserve-order>true</preserve-order>
