@@ -20,7 +20,7 @@
         <jahia.host>sneaker.jahia.com</jahia.host>
         <jahia.port></jahia.port>
         <jahia.protocol>https</jahia.protocol>
-        <unomi.host>rangers.jahia.com</unomi.host>
+        <unomi.host>rangers.int.jahia.com</unomi.host>
         <unomi.port></unomi.port>
         <unomi.protocol>https</unomi.protocol>
         <jahia.context></jahia.context>
