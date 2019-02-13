@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Tests Runner">
+    <test name="Package with subpackages">
+        <classes>
+            <class name="org.jahia.test.runners.CukeRunnerAll"/>
+        </classes>
+    </test>
+</suite>
