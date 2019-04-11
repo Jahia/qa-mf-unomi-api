@@ -1,9 +1,9 @@
-package org.jahia.test.apiutils;
+package org.jahia.test.unomiapi.apiutils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.jahia.test.data.TestGlobalConfiguration;
+import org.jahia.test.unomiapi.data.TestGlobalConfiguration;
 
 import io.restassured.RestAssured;
 

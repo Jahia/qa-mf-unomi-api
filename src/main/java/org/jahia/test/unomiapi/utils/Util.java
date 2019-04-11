@@ -1,11 +1,11 @@
-package org.jahia.test.utils;
+package org.jahia.test.unomiapi.utils;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
-import org.jahia.test.data.TestGlobalConfiguration;
-import org.jahia.test.data.TestRtVariables;
+import org.jahia.test.unomiapi.data.TestGlobalConfiguration;
+import org.jahia.test.unomiapi.data.TestRtVariables;
 
 public class Util
 {

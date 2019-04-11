@@ -1,10 +1,10 @@
-package org.jahia.test.glue;
+package org.jahia.test.unomiapi.glue;
 
 import static io.restassured.RestAssured.given;
 
-import org.jahia.test.data.TestGlobalConfiguration;
-import org.jahia.test.data.TestRtVariables;
-import org.jahia.test.utils.Util;
+import org.jahia.test.unomiapi.data.TestGlobalConfiguration;
+import org.jahia.test.unomiapi.data.TestRtVariables;
+import org.jahia.test.unomiapi.utils.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

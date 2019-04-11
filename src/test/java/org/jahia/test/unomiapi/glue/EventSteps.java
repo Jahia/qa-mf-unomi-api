@@ -1,4 +1,4 @@
-package org.jahia.test.glue;
+package org.jahia.test.unomiapi.glue;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -8,8 +8,8 @@ import org.apache.unomi.api.CustomItem;
 import org.apache.unomi.api.Event;
 import org.apache.unomi.api.Profile;
 import org.apache.unomi.api.Session;
-import org.jahia.test.data.TestGlobalConfiguration;
-import org.jahia.test.data.TestRtVariables;
+import org.jahia.test.unomiapi.data.TestGlobalConfiguration;
+import org.jahia.test.unomiapi.data.TestRtVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

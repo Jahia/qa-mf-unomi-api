@@ -2,7 +2,7 @@
 <suite name="All Tests Runner">
     <test name="Package with subpackages">
         <classes>
-            <class name="org.jahia.test.runners.CukeRunnerAll"/>
+            <class name="org.jahia.test.runners.unomiapi.CukeRunnerAll"/>
         </classes>
     </test>
 </suite>

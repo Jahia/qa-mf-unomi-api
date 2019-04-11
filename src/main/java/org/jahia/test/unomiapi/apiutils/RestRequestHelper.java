@@ -1,4 +1,4 @@
-package org.jahia.test.apiutils;
+package org.jahia.test.unomiapi.apiutils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -6,8 +6,8 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.net.URL;
 
-import org.jahia.test.data.TestGlobalConfiguration;
-import org.jahia.test.data.TestRtVariables;
+import org.jahia.test.unomiapi.data.TestGlobalConfiguration;
+import org.jahia.test.unomiapi.data.TestRtVariables;
 
 import com.mashape.unirest.http.HttpMethod;
 

@@ -1,4 +1,4 @@
-package org.jahia.test.runners;
+package org.jahia.test.unomiapi.runners;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.testng.AbstractTestNGCucumberTests;

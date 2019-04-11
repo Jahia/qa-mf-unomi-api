@@ -1,11 +1,11 @@
-package org.jahia.test.glue;
+package org.jahia.test.unomiapi.glue;
 
 import java.net.URL;
 
-import org.jahia.test.apiutils.AuthenticationHelper;
-import org.jahia.test.apiutils.RestRequestHelper;
-import org.jahia.test.data.TestGlobalConfiguration;
-import org.jahia.test.data.TestRtVariables;
+import org.jahia.test.unomiapi.apiutils.AuthenticationHelper;
+import org.jahia.test.unomiapi.apiutils.RestRequestHelper;
+import org.jahia.test.unomiapi.data.TestGlobalConfiguration;
+import org.jahia.test.unomiapi.data.TestRtVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

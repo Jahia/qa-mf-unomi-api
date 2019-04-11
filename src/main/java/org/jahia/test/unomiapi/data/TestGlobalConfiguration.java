@@ -1,4 +1,4 @@
-package org.jahia.test.data;
+package org.jahia.test.unomiapi.data;
 
 import org.apache.commons.lang.StringUtils;
 

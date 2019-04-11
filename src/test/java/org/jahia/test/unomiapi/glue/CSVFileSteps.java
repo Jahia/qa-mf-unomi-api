@@ -1,11 +1,11 @@
-package org.jahia.test.glue;
+package org.jahia.test.unomiapi.glue;
 
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-import org.jahia.test.data.TestRtVariables;
+import org.jahia.test.unomiapi.data.TestRtVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;

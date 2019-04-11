@@ -1,4 +1,4 @@
-package org.jahia.test.data;
+package org.jahia.test.unomiapi.data;
 
 public class VariantCondition
 {

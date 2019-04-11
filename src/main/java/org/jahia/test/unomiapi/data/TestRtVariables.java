@@ -1,4 +1,4 @@
-package org.jahia.test.data;
+package org.jahia.test.unomiapi.data;
 
 import java.io.File;
 import java.util.ArrayList;
