@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import org.jahia.test.unomiapi.data.TestGlobalConfiguration;
-import org.jahia.test.unomiapi.data.TestRtVariables;
+import org.jahia.test.unomiapi.data.UnomiApiTestRtVariables;
 
 public class Util
 {
@@ -60,7 +60,7 @@ public class Util
 				directory.mkdirs();
 
 			FileUtils.writeByteArrayToFile(file, byteArray);
-			TestRtVariables.lastDownloadedFile = file;
+			UnomiApiTestRtVariables.lastDownloadedFile = file;
 		}
 		catch (IOException e)
 		{
@@ -78,7 +78,7 @@ public class Util
 
 			File file = new File(TestGlobalConfiguration.getLogsDirectory() + fileName);
 			FileUtils.writeByteArrayToFile(file, byteArray);
-			TestRtVariables.lastDownloadedFile = file;
+			UnomiApiTestRtVariables.lastDownloadedFile = file;
 		}
 		catch (IOException e)
 		{

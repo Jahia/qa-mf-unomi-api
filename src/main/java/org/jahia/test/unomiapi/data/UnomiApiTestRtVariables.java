@@ -11,7 +11,7 @@ import org.apache.unomi.api.services.PersonalizationService.PersonalizationReque
 
 import io.restassured.response.Response;
 
-public class TestRtVariables
+public class UnomiApiTestRtVariables
 {
 
 	// real time scenario variables

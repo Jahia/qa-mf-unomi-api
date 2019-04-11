@@ -1,4 +1,4 @@
-package org.jahia.test.unomiapi.apiutils;
+package org.jahia.test.unomiapi.helpers;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -7,7 +7,7 @@ import java.io.PrintStream;
 import java.net.URL;
 
 import org.jahia.test.unomiapi.data.TestGlobalConfiguration;
-import org.jahia.test.unomiapi.data.TestRtVariables;
+import org.jahia.test.unomiapi.data.UnomiApiTestRtVariables;
 
 import com.mashape.unirest.http.HttpMethod;
 
@@ -62,7 +62,7 @@ public class RestRequestHelper
 			writetoLogFile = new PrintStream(
 					new FileOutputStream(
 							TestGlobalConfiguration.getLogsDirectory() + "/"
-									+ TestRtVariables.scenarioName.replaceAll("\\s+", "_") + ".log",
+									+ UnomiApiTestRtVariables.scenarioName.replaceAll("\\s+", "_") + ".log",
 							true));
 		}
 		catch (FileNotFoundException e)
@@ -76,6 +76,13 @@ public class RestRequestHelper
 	public RequestSpecification buildRequest(ContentType reqContentType, Headers headers)
 	{
 		return buildRequest(reqContentType).with().headers(headers);
+	}
+
+	public RequestSpecification buildRequest(String username, String password,
+			ContentType reqContentType, Headers headers)
+	{
+		return buildRequest(reqContentType).auth().preemptive().basic(username, password).with()
+				.headers(headers);
 	}
 
 	public RequestSpecification buildRequest(ContentType acceptContentType,

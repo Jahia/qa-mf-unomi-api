@@ -9,7 +9,7 @@ import org.apache.unomi.api.Event;
 import org.apache.unomi.api.Profile;
 import org.apache.unomi.api.Session;
 import org.jahia.test.unomiapi.data.TestGlobalConfiguration;
-import org.jahia.test.unomiapi.data.TestRtVariables;
+import org.jahia.test.unomiapi.data.UnomiApiTestRtVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,17 +26,17 @@ public class EventSteps
 	public void i_define_a_unomi_context_event_with_the_following_parameters(
 			DataTable eventParamsDt) throws Throwable
 	{
-		String profileId = TestRtVariables.storedIds.get("context-profile-id") != null
-				? TestRtVariables.storedIds.get("context-profile-id")
+		String profileId = UnomiApiTestRtVariables.storedIds.get("context-profile-id") != null
+				? UnomiApiTestRtVariables.storedIds.get("context-profile-id")
 				: "";
 		Profile profile = new Profile(profileId);
 
 		Session session;
-		if (TestRtVariables.storedIds.get("wem-session-id") == null)
+		if (UnomiApiTestRtVariables.storedIds.get("wem-session-id") == null)
 			session = null;
 		else
-			session = new Session(TestRtVariables.storedIds.get("wem-session-id"), profile,
-					new Date(), TestRtVariables.scope);
+			session = new Session(UnomiApiTestRtVariables.storedIds.get("wem-session-id"), profile,
+					new Date(), UnomiApiTestRtVariables.scope);
 
 		Map<String, String> eventParams = eventParamsDt.asMap(String.class, String.class);
 		Event event;
@@ -45,16 +45,16 @@ public class EventSteps
 		{
 			// Initialize context like if you display the first page on the website
 
-			CustomItem target = new CustomItem(TestRtVariables.storedIds.get("pageID"), "page");
-			target.setScope(TestRtVariables.scope);
+			CustomItem target = new CustomItem(UnomiApiTestRtVariables.storedIds.get("pageID"), "page");
+			target.setScope(UnomiApiTestRtVariables.scope);
 
 			Map<String, Object> pageInfo = new HashMap<>();
-			pageInfo.put("pageID", TestRtVariables.storedIds.get("pageID"));
+			pageInfo.put("pageID", UnomiApiTestRtVariables.storedIds.get("pageID"));
 			pageInfo.put("nodeType", "jnt:page");
 			pageInfo.put("pageName", eventParams.get("pageName"));
 			pageInfo.put("pagePath", eventParams.get("pagePath"));
 			pageInfo.put("templateName", eventParams.get("templateName"));
-			pageInfo.put("language", TestRtVariables.siteLocale);
+			pageInfo.put("language", UnomiApiTestRtVariables.siteLocale);
 			pageInfo.put("referringURL", "");
 
 			pageInfo.put("destinationUrl",
@@ -82,10 +82,10 @@ public class EventSteps
 			properties.put("pageInfo", pageInfo);
 			target.setProperties(properties);
 
-			CustomItem source = new CustomItem(TestRtVariables.storedIds.get("siteID"), "site");
-			source.setScope(TestRtVariables.scope);
+			CustomItem source = new CustomItem(UnomiApiTestRtVariables.storedIds.get("siteID"), "site");
+			source.setScope(UnomiApiTestRtVariables.scope);
 
-			event = new Event(eventParams.get("EventType"), session, profile, TestRtVariables.scope,
+			event = new Event(eventParams.get("EventType"), session, profile, UnomiApiTestRtVariables.scope,
 					source, target, new Date());
 		}
 
@@ -93,7 +93,7 @@ public class EventSteps
 		{
 			Map<String, Object> properties = new HashMap<>();
 			properties.put("targetType", "profile");
-			properties.put("targetId", TestRtVariables.storedIds.get("context-profile-id"));
+			properties.put("targetId", UnomiApiTestRtVariables.storedIds.get("context-profile-id"));
 
 			Map<String, Object> addUpdate = new HashMap<>();
 			for (Map.Entry<String, String> entry : eventParams.entrySet())
@@ -104,16 +104,16 @@ public class EventSteps
 			properties.put(eventParams.get("updateType"), addUpdate);
 
 			CustomItem source = new CustomItem("wemProfile", "wemProfile");
-			source.setScope(TestRtVariables.scope);
+			source.setScope(UnomiApiTestRtVariables.scope);
 
-			event = new Event(eventParams.get("eventType"), session, profile, TestRtVariables.scope,
+			event = new Event(eventParams.get("eventType"), session, profile, UnomiApiTestRtVariables.scope,
 					source, null, properties, new Date(), true);
 		}
 
 		else
 			throw new RuntimeException("EventType unknown, please check the feature file");
 
-		TestRtVariables.events.add(event);
+		UnomiApiTestRtVariables.events.add(event);
 
 	}
 

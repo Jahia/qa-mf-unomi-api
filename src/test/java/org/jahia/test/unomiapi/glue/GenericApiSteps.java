@@ -3,7 +3,7 @@ package org.jahia.test.unomiapi.glue;
 import static io.restassured.RestAssured.given;
 
 import org.jahia.test.unomiapi.data.TestGlobalConfiguration;
-import org.jahia.test.unomiapi.data.TestRtVariables;
+import org.jahia.test.unomiapi.data.UnomiApiTestRtVariables;
 import org.jahia.test.unomiapi.utils.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,13 +24,13 @@ public class GenericApiSteps
 					+ "/modules/seleniumTests/api/site/" + siteKey;
 			logger.info(String.format("Calling df-tests api to delete %s site. Url is: %s", siteKey,
 					deleteUrl));
-			TestRtVariables.response = given().relaxedHTTPSValidation()
+			UnomiApiTestRtVariables.response = given().relaxedHTTPSValidation()
 					.header("Accept", "application/json").filter(new ErrorLoggingFilter())
 					.contentType("application/json").delete(deleteUrl);
 			Util.waitForMillis(30000);
 			logger.info(String.format("Delete %s site response code is %d  and body is %s", siteKey,
-					TestRtVariables.response.getStatusCode(),
-					TestRtVariables.response.getBody().asString()));
+					UnomiApiTestRtVariables.response.getStatusCode(),
+					UnomiApiTestRtVariables.response.getBody().asString()));
 
 		}
 		catch (Exception e)

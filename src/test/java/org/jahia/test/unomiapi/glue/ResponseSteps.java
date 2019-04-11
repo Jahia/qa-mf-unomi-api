@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.jahia.test.unomiapi.data.TestRtVariables;
+import org.jahia.test.unomiapi.data.UnomiApiTestRtVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
@@ -22,12 +22,12 @@ public class ResponseSteps
 		for (String id : ids)
 		{
 			Pattern p = Pattern.compile("\"" + id + "\": \"(.+?)\"");
-			Matcher m = p.matcher(TestRtVariables.response.asString());
+			Matcher m = p.matcher(UnomiApiTestRtVariables.response.asString());
 
 			// if an occurrence if a pattern was found in a given string...
 			if (m.find())
 			{
-				TestRtVariables.storedIds.put(id, m.group(1));
+				UnomiApiTestRtVariables.storedIds.put(id, m.group(1));
 			}
 			else
 				logger.error(String.format("Could not extract id %s. Found %d occurences using %s",
@@ -41,12 +41,12 @@ public class ResponseSteps
 		for (String id : ids)
 		{
 			Pattern p = Pattern.compile(id + "=(.+?);");
-			Matcher m = p.matcher(TestRtVariables.response.headers().toString());
+			Matcher m = p.matcher(UnomiApiTestRtVariables.response.headers().toString());
 
 			// if an occurrence if a pattern was found in a given string...
 			if (m.find())
 			{
-				TestRtVariables.storedIds.put(id, m.group(1));
+				UnomiApiTestRtVariables.storedIds.put(id, m.group(1));
 			}
 			else
 				logger.error(String.format("Could not extract id %s. Found %d occurences using %s",
@@ -57,7 +57,7 @@ public class ResponseSteps
 	@Then("^the response code is (\\d+)$")
 	public void the_response_code_is(int expectedCode) throws Throwable
 	{
-		Assert.assertEquals(TestRtVariables.response.getStatusCode(), expectedCode,
+		Assert.assertEquals(UnomiApiTestRtVariables.response.getStatusCode(), expectedCode,
 				"Status code is not as expected");
 	}
 

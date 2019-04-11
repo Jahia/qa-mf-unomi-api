@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 import org.apache.unomi.api.ContextResponse;
 import org.apache.unomi.api.services.PersonalizationService.PersonalizationRequest;
 import org.apache.unomi.persistence.spi.CustomObjectMapper;
-import org.jahia.test.unomiapi.data.TestRtVariables;
+import org.jahia.test.unomiapi.data.UnomiApiTestRtVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
@@ -25,14 +25,14 @@ public class PersonalizationSteps
 			throws Throwable
 	{
 		Pattern p = Pattern.compile("var personalization = (.+);");
-		Matcher m = p.matcher(TestRtVariables.response.asString());
+		Matcher m = p.matcher(UnomiApiTestRtVariables.response.asString());
 
 		int index = 1;
 		while (m.find())
 		{
 			if (index == personalizationIndex)
 			{
-				TestRtVariables.personalizationRequests.add(CustomObjectMapper.getObjectMapper()
+				UnomiApiTestRtVariables.personalizationRequests.add(CustomObjectMapper.getObjectMapper()
 						.readValue(m.group(1), PersonalizationRequest.class));
 			}
 			index++;
@@ -44,11 +44,11 @@ public class PersonalizationSteps
 			int expectedNbVariantsInFirstPerso) throws Throwable
 	{
 		ContextResponse contextResponse = CustomObjectMapper.getObjectMapper()
-				.readValue(TestRtVariables.response.asString(), ContextResponse.class);
+				.readValue(UnomiApiTestRtVariables.response.asString(), ContextResponse.class);
 		if (contextResponse.getPersonalizations().size() == 0)
 			throw new RuntimeException(
 					String.format("Cannot get variants as there is no personalization in : %s",
-							TestRtVariables.response.asString()));
+							UnomiApiTestRtVariables.response.asString()));
 
 		for (Map.Entry<String, List<String>> entry : contextResponse.getPersonalizations()
 				.entrySet())

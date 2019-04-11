@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-import org.jahia.test.unomiapi.data.TestRtVariables;
+import org.jahia.test.unomiapi.data.UnomiApiTestRtVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
@@ -24,7 +24,7 @@ public class CSVFileSteps
 	{
 		boolean found = false;
 		Reader reader = Files
-				.newBufferedReader(Paths.get(TestRtVariables.lastDownloadedFile.getAbsolutePath()));
+				.newBufferedReader(Paths.get(UnomiApiTestRtVariables.lastDownloadedFile.getAbsolutePath()));
 		CSVReader csvReader = new CSVReader(reader);
 		List<String[]> csvLines = csvReader.readAll();
 		for (int i = 0; i < csvLines.size(); i++)

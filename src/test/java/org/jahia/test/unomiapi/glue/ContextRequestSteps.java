@@ -5,9 +5,9 @@ import java.util.Arrays;
 
 import org.apache.unomi.api.ContextRequest;
 import org.apache.unomi.api.CustomItem;
-import org.jahia.test.unomiapi.apiutils.RestRequestHelper;
 import org.jahia.test.unomiapi.data.TestGlobalConfiguration;
-import org.jahia.test.unomiapi.data.TestRtVariables;
+import org.jahia.test.unomiapi.data.UnomiApiTestRtVariables;
+import org.jahia.test.unomiapi.helpers.RestRequestHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,22 +31,22 @@ public class ContextRequestSteps
 			throws Throwable
 	{
 		ContextRequest contextRequest = new ContextRequest();
-		contextRequest.setEvents(TestRtVariables.events);
+		contextRequest.setEvents(UnomiApiTestRtVariables.events);
 		contextRequest.setRequiredProfileProperties(Arrays.asList("j:nodename"));
-		contextRequest.setSessionId(TestRtVariables.storedIds.get("wem-session-id"));
+		contextRequest.setSessionId(UnomiApiTestRtVariables.storedIds.get("wem-session-id"));
 
-		CustomItem sourceItem = new CustomItem(TestRtVariables.storedIds.get("pageID"), "page");
-		sourceItem.setScope(TestRtVariables.scope);
+		CustomItem sourceItem = new CustomItem(UnomiApiTestRtVariables.storedIds.get("pageID"), "page");
+		sourceItem.setScope(UnomiApiTestRtVariables.scope);
 		contextRequest.setSource(sourceItem);
 
-		contextRequest.setPersonalizations(TestRtVariables.personalizationRequests);
+		contextRequest.setPersonalizations(UnomiApiTestRtVariables.personalizationRequests);
 
 		RestRequestHelper reqHelper = new RestRequestHelper();
 		RequestSpecification req = buildContextRequestSpec(reqHelper);
-		TestRtVariables.response = reqHelper.sendRequest(req, new URL(contextJsonUrl),
+		UnomiApiTestRtVariables.response = reqHelper.sendRequest(req, new URL(contextJsonUrl),
 				contextRequest, HttpMethod.POST);
 
-		TestRtVariables.clearContextRequestElements();
+		UnomiApiTestRtVariables.clearContextRequestElements();
 	}
 
 	private RequestSpecification buildContextRequestSpec(RestRequestHelper reqHelper)
@@ -54,9 +54,9 @@ public class ContextRequestSteps
 		RequestSpecification req;
 		Header header = new Header("X-Unomi-Peer", TestGlobalConfiguration.getUnomiKey());
 		Cookie cookie = null;
-		if (TestRtVariables.storedIds.get("context-profile-id") != null)
+		if (UnomiApiTestRtVariables.storedIds.get("context-profile-id") != null)
 			cookie = new Cookie.Builder("context-profile-id",
-					TestRtVariables.storedIds.get("context-profile-id")).setSecured(false).build();
+					UnomiApiTestRtVariables.storedIds.get("context-profile-id")).setSecured(false).build();
 
 		if (cookie != null)
 			req = reqHelper.buildRequest(ContentType.JSON, new Headers(header),

@@ -1,6 +1,6 @@
 package org.jahia.test.unomiapi.glue;
 
-import org.jahia.test.unomiapi.data.TestRtVariables;
+import org.jahia.test.unomiapi.data.UnomiApiTestRtVariables;
 import org.jahia.test.unomiapi.utils.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,8 +19,8 @@ public class FrameworkSteps
 	public void before(Scenario s)
 	{
 		// reset default values for each scenario further steps in the scenario might change them
-		TestRtVariables.reset();
-		TestRtVariables.scenarioName = s.getName();
+		UnomiApiTestRtVariables.reset();
+		UnomiApiTestRtVariables.scenarioName = s.getName();
 	}
 
 	@After
@@ -35,13 +35,13 @@ public class FrameworkSteps
 	@Given("^The site locale is \"([^\"]*)\"$")
 	public void the_site_locale_is(String locale) throws Throwable
 	{
-		TestRtVariables.siteLocale = locale;
+		UnomiApiTestRtVariables.siteLocale = locale;
 	}
 
 	@Given("^I store the current time$")
 	public void i_store_the_current_time() throws Throwable
 	{
-		TestRtVariables.storedTimeMillis = System.currentTimeMillis();
+		UnomiApiTestRtVariables.storedTimeMillis = System.currentTimeMillis();
 	}
 
 	@When("^I wait (\\d+) ms$")

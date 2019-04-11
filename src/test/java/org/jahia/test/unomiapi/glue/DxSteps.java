@@ -2,10 +2,10 @@ package org.jahia.test.unomiapi.glue;
 
 import java.net.URL;
 
-import org.jahia.test.unomiapi.apiutils.AuthenticationHelper;
-import org.jahia.test.unomiapi.apiutils.RestRequestHelper;
 import org.jahia.test.unomiapi.data.TestGlobalConfiguration;
-import org.jahia.test.unomiapi.data.TestRtVariables;
+import org.jahia.test.unomiapi.data.UnomiApiTestRtVariables;
+import org.jahia.test.unomiapi.helpers.AuthenticationHelper;
+import org.jahia.test.unomiapi.helpers.RestRequestHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,10 +28,10 @@ public class DxSteps
 		RestRequestHelper reqHelper = new RestRequestHelper();
 		RequestSpecification req = reqHelper.buildRequest(ContentType.JSON);
 
-		TestRtVariables.response = reqHelper
+		UnomiApiTestRtVariables.response = reqHelper
 				.sendRequest(req,
 						new URL(TestGlobalConfiguration.getBaseUrl() + "/sites/"
-								+ TestRtVariables.scope + "/" + page + ".html"),
+								+ UnomiApiTestRtVariables.scope + "/" + page + ".html"),
 						null, HttpMethod.GET);
 	}
 
@@ -41,7 +41,7 @@ public class DxSteps
 		AuthenticationHelper auth = new AuthenticationHelper();
 		String cookie = auth.getAuthenticationCookie(user, password);
 
-		TestRtVariables.storedIds.put("Cookie",
+		UnomiApiTestRtVariables.storedIds.put("Cookie",
 				"JSESSIONID=" + cookie + "; Path=/; Secure; HttpOnly");
 	}
 

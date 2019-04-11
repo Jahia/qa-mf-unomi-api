@@ -1,4 +1,4 @@
-package org.jahia.test.unomiapi.apiutils;
+package org.jahia.test.unomiapi.helpers;
 
 import java.net.MalformedURLException;
 import java.net.URL;
