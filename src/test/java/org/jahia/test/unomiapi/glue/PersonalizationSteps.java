@@ -24,19 +24,26 @@ public class PersonalizationSteps
 	public void i_extract_the_personalization_from_the_response(int personalizationIndex)
 			throws Throwable
 	{
-		Pattern p = Pattern.compile("var personalization = (.+);");
+		String regExp = "var personalization = (.+);";
+		Pattern p = Pattern.compile(regExp);
 		Matcher m = p.matcher(UnomiApiTestRtVariables.response.asString());
 
 		int index = 1;
+		int nbPerso = 0;
 		while (m.find())
 		{
+			nbPerso++;
 			if (index == personalizationIndex)
 			{
-				UnomiApiTestRtVariables.personalizationRequests.add(CustomObjectMapper.getObjectMapper()
-						.readValue(m.group(1), PersonalizationRequest.class));
+				UnomiApiTestRtVariables.personalizationRequests.add(CustomObjectMapper
+						.getObjectMapper().readValue(m.group(1), PersonalizationRequest.class));
 			}
 			index++;
 		}
+
+		if (nbPerso == 0)
+			throw new RuntimeException(
+					"Could not find any personalization matching regexp: " + regExp);
 	}
 
 	@Then("^The first personalization in the response returns (\\d+) variants ids$")
