@@ -44,6 +44,14 @@
             </snapshots>
         </repository>
     </repositories>
+    
+    <distributionManagement>
+        <snapshotRepository>
+            <id>jahia-internal</id>
+            <url>https://devtools.jahia.com/nexus/content/repositories/jahia-internal-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+    
 
     <dependencies>
         <dependency>
