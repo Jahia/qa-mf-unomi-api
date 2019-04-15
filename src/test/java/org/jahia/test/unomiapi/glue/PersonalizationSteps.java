@@ -29,19 +29,19 @@ public class PersonalizationSteps
 		Matcher m = p.matcher(UnomiApiTestRtVariables.response.asString());
 
 		int index = 1;
-		int nbPerso = 0;
+		boolean found = false;
 		while (m.find())
 		{
-			nbPerso++;
 			if (index == personalizationIndex)
 			{
+				found = true;
 				UnomiApiTestRtVariables.personalizationRequests.add(CustomObjectMapper
 						.getObjectMapper().readValue(m.group(1), PersonalizationRequest.class));
 			}
 			index++;
 		}
 
-		if (nbPerso == 0)
+		if (!found)
 			throw new RuntimeException(
 					"Could not find any personalization matching regexp: " + regExp);
 	}

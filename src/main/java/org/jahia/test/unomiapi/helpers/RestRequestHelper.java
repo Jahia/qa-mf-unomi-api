@@ -3,8 +3,11 @@ package org.jahia.test.unomiapi.helpers;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jahia.test.unomiapi.data.TestGlobalConfiguration;
 import org.jahia.test.unomiapi.data.UnomiApiTestRtVariables;
@@ -17,6 +20,7 @@ import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
+import io.restassured.http.Cookie;
 import io.restassured.http.Cookies;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
@@ -25,17 +29,62 @@ import io.restassured.specification.RequestSpecification;
 public class RestRequestHelper
 {
 
-	public RequestSpecification buildRequest(ContentType reqContentType)
+	private PrintStream getLogFilePrintStream()
+	{
+		PrintStream writetoLogFile = null;
+		try
+		{
+			File directory = new File(TestGlobalConfiguration.getLogsDirectory());
+			if (!directory.exists())
+				directory.mkdirs();
+
+			FileOutputStream fos = new FileOutputStream(
+					TestGlobalConfiguration.getLogsDirectory() + "/"
+							+ UnomiApiTestRtVariables.scenarioName.replaceAll("\\s+", "_") + ".log",
+					true);
+
+			// adding lines of ===== before each request log for visibility
+			for (int i = 0; i < 3; i++)
+			{
+				fos.write(
+						"=============================================================================================== \n"
+								.getBytes());
+			}
+			// fos.close();
+
+			writetoLogFile = new PrintStream(fos);
+		}
+		catch (FileNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return writetoLogFile;
+	}
+
+	private RequestSpecification basicBuildRequest(ContentType reqContentType)
 	{
 		RequestSpecification req = RestAssured.given().relaxedHTTPSValidation().redirects()
 				.allowCircular(true).and().redirects().max(10).and().redirects().follow(true).with()
 				.contentType(reqContentType);
 
+		addCookiesIfAny(req);
+
 		PrintStream writetoLogFile = getLogFilePrintStream();
 
 		// if required we log request and response or errors only
 		if (TestGlobalConfiguration.getLogErrorsOnly())
-			req = req.log().ifValidationFails(LogDetail.ALL, true).filter(new ErrorLoggingFilter());
+			if (writetoLogFile != null)
+				req = req.log().ifValidationFails(LogDetail.ALL, true)
+						.filter(new ErrorLoggingFilter(writetoLogFile));
+			else
+				req = req.log().ifValidationFails(LogDetail.ALL, true)
+						.filter(new ErrorLoggingFilter());
 		else
 		{
 			// write all reqs and resps to a file
@@ -50,52 +99,41 @@ public class RestRequestHelper
 		return req;
 	}
 
-	private PrintStream getLogFilePrintStream()
+	private void addCookiesIfAny(RequestSpecification req)
 	{
-		PrintStream writetoLogFile = null;
-		try
+		List<Cookie> cookies = new ArrayList<Cookie>();
+
+		addCookieIfAny(cookies, "context-profile-id", "profileId");
+		addCookieIfAny(cookies, "JSESSIONID", "JSESSIONID");
+		addCookieIfAny(cookies, "wem-session-id", "wem-session-id");
+
+		req = req.with().cookies(new Cookies(cookies));
+
+	}
+
+	public void addCookieIfAny(List<Cookie> cookies, String cookieName, String idStored)
+	{
+		if (UnomiApiTestRtVariables.storedIds.get(idStored) != null)
 		{
-			File directory = new File(TestGlobalConfiguration.getLogsDirectory());
-			if (!directory.exists())
-				directory.mkdirs();
-
-			writetoLogFile = new PrintStream(
-					new FileOutputStream(
-							TestGlobalConfiguration.getLogsDirectory() + "/"
-									+ UnomiApiTestRtVariables.scenarioName.replaceAll("\\s+", "_") + ".log",
-							true));
+			Cookie contextProfileIdCookie = new Cookie.Builder(cookieName,
+					UnomiApiTestRtVariables.storedIds.get(idStored)).setSecured(false).build();
+			cookies.add(contextProfileIdCookie);
 		}
-		catch (FileNotFoundException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return writetoLogFile;
 	}
 
-	public RequestSpecification buildRequest(ContentType reqContentType, Headers headers)
+	public RequestSpecification buildRequest()
 	{
-		return buildRequest(reqContentType).with().headers(headers);
+		return basicBuildRequest(ContentType.JSON);
 	}
 
-	public RequestSpecification buildRequest(String username, String password,
-			ContentType reqContentType, Headers headers)
+	public RequestSpecification buildRequest(Headers headers)
 	{
-		return buildRequest(reqContentType).auth().preemptive().basic(username, password).with()
-				.headers(headers);
+		return basicBuildRequest(ContentType.JSON).with().headers(headers);
 	}
 
-	public RequestSpecification buildRequest(ContentType acceptContentType,
-			ContentType reqContentType, Headers headers)
+	public RequestSpecification buildRequest(String username, String password)
 	{
-		return buildRequest(reqContentType).with().headers(headers).with()
-				.accept(acceptContentType);
-	}
-
-	public RequestSpecification buildRequest(ContentType reqContentType, Headers headers,
-			Cookies cookies)
-	{
-		return buildRequest(reqContentType).with().headers(headers).with().cookies(cookies);
+		return basicBuildRequest(ContentType.JSON).auth().preemptive().basic(username, password);
 	}
 
 	public Response sendRequest(RequestSpecification requestSpec, URL url, Object body,

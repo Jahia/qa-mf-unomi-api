@@ -4,7 +4,7 @@ Feature: Update Profile event
   Scenario: Update profile event during perso request
     Given I get the "home" page from DX server
     And I extract the ids "siteID, pageID" from the response
-    And I extract the ids "wem-session-id" from the response headers
+    And I extract the ids "wem-session-id,JSESSIONID" from the response headers
     And I define a unomi context event with the following parameters
       | eventType         | view                                   |
       | pageName          | Home                                   |
@@ -14,10 +14,10 @@ Feature: Update Profile event
       | tags              | home                                   |
       | isContentTemplate | false                                  |
     And I post a context request to Unomi server with the previously defined elements
-    And I extract the ids "context-profile-id" from the response headers
+    And I extract the ids "profileId" from the response
     And I get the "perso-on-profile-property-conten" page from DX server
     And I extract the ids "pageID" from the response
-    And I extract the personalization 2 from the response
+    And I extract the variant id corresponding to the displayable name "qa automaton" from the response
     And I define a unomi context event with the following parameters
       | eventType    | view                                                           |
       | pageName     | perso-on-profile-property-content                              |
@@ -29,4 +29,6 @@ Feature: Update Profile event
       | properties.firstName | qa               |
       | properties.lastName  | automaton        |
     When I post a context request to Unomi server with the previously defined elements
-    Then The first personalization in the response returns 2 variants ids
+    And I get the "perso-on-profile-property-conten" page from DX server
+    Then I extract the displayed variant 2 id from the response
+    And The displayed variant id corresponds to the variant id of "qa automaton"

@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import com.mashape.unirest.http.HttpMethod;
 
 import cucumber.api.java.en.Given;
-import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 
 public class DxSteps
@@ -26,13 +25,12 @@ public class DxSteps
 			page = "home/" + page;
 
 		RestRequestHelper reqHelper = new RestRequestHelper();
-		RequestSpecification req = reqHelper.buildRequest(ContentType.JSON);
+		RequestSpecification req = reqHelper.buildRequest();
 
-		UnomiApiTestRtVariables.response = reqHelper
-				.sendRequest(req,
-						new URL(TestGlobalConfiguration.getBaseUrl() + "/sites/"
-								+ UnomiApiTestRtVariables.scope + "/" + page + ".html"),
-						null, HttpMethod.GET);
+		UnomiApiTestRtVariables.response = reqHelper.sendRequest(req,
+				new URL(TestGlobalConfiguration.getBaseUrl() + "/sites/"
+						+ UnomiApiTestRtVariables.scope + "/" + page + ".html"),
+				null, HttpMethod.GET);
 	}
 
 	@Given("^I login with user \"([^\"]*)\" and password \"([^\"]*)\"$")
@@ -41,7 +39,7 @@ public class DxSteps
 		AuthenticationHelper auth = new AuthenticationHelper();
 		String cookie = auth.getAuthenticationCookie(user, password);
 
-		UnomiApiTestRtVariables.storedIds.put("Cookie",
+		UnomiApiTestRtVariables.storedIds.put("JSESSIONID",
 				"JSESSIONID=" + cookie + "; Path=/; Secure; HttpOnly");
 	}
 

@@ -11,9 +11,6 @@ import org.testng.Assert;
 
 import com.mashape.unirest.http.HttpMethod;
 
-import io.restassured.http.ContentType;
-import io.restassured.http.Header;
-import io.restassured.http.Headers;
 import io.restassured.specification.RequestSpecification;
 
 public class ProfileHelper
@@ -36,13 +33,20 @@ public class ProfileHelper
 	private RequestSpecification buildProfileRequestSpec(String user, String password)
 	{
 		RequestSpecification req;
-		Header header = new Header("X-Unomi-Peer", TestGlobalConfiguration.getUnomiKey());
 
 		RestRequestHelper reqHelper = new RestRequestHelper();
-		req = reqHelper.buildRequest(user, password, ContentType.JSON, new Headers(header));
+		req = reqHelper.buildRequest(user, password);
 		return req;
 	}
 
+	public boolean doesProfileContainsProperty(Profile profile, String property,
+			String expectedValue) throws Throwable
+	{
+		String actualValue = (String) profile.getProperty(property);
+		return actualValue.equals(expectedValue);
+	}
+
+	// Will look for current profile in the UnomiApiTestRtVariables
 	public boolean doesProfileContainsProperty(String property, String expectedValue)
 			throws Throwable
 	{
