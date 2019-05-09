@@ -43,6 +43,8 @@ public class ProfileHelper
 			String expectedValue) throws Throwable
 	{
 		String actualValue = (String) profile.getProperty(property);
+        if (actualValue == null)
+            return false;
 		return actualValue.equals(expectedValue);
 	}
 
