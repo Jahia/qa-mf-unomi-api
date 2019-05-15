@@ -11,16 +11,16 @@ public class TestGlobalConfiguration
 {
 
 	/** The default Jahia host. */
-	private static String defaultJahiaHost = "localhost";
+    private static String defaultJahiaHost = "sneaker.jahia.com";
 
 	/** The default Jahia protocol. */
-	private static String defaultJahiaProtocol = "http";
+    private static String defaultJahiaProtocol = "https";
 
 	/** The default Jahia port. */
 	private static String defaultJahiaPort = "";
 
 	/** The default Unomi host. */
-	private static String defaultUnomiHost = "localhost";
+    private static String defaultUnomiHost = "rangers.jahia.com";
 
 	/** The default Unomi protocol. */
 	private static String defaultUnomiProtocol = "https";
