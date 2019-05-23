@@ -21,7 +21,7 @@ public class UnomiApiTestRtVariables
 	public static List<PersonalizationRequest> personalizationRequests;
 	public static boolean fixtureFailed = false;
 	public static String siteLocale;
-	public static long storedTimeMillis;
+    public static long scenarioStartTimeMillis;
 	public static String scenarioName;
 	public static boolean ensureCleanSession;
 	public static File[] previousFiles;
@@ -30,10 +30,10 @@ public class UnomiApiTestRtVariables
 	public static Response response;
 
 	// init all with default values
-	public static void reset()
+	public static void init()
 	{
 		siteLocale = "en";
-		storedTimeMillis = 0000;
+        scenarioStartTimeMillis = System.currentTimeMillis();
 		scenarioName = "undefined";
 		ensureCleanSession = true;
 		previousFiles = null;

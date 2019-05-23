@@ -3,7 +3,7 @@ Feature: Update Profile event
   @unomiapi
   Scenario: Update profile event during perso request
     Given I get the "home" page from DX server
-    And I extract the ids "siteID, pageID" from the response
+    And I extract the ids "siteID,pageID" from the response
     And I extract the ids "wem-session-id,JSESSIONID" from the response headers
     And I define a unomi context event with the following parameters
       | eventType         | view                                   |

@@ -1,6 +1,6 @@
 package org.jahia.test.unomiapi.data;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Selenium tests global configuration Looks for a property from jahia

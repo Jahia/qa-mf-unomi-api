@@ -16,7 +16,7 @@ public class ResponseSteps
 {
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	@Given("^I extract the ids \"([^\"]*)\" from the response$")
+    @Given("I extract the ids {list} from the response")
 	public void i_extract_the_ids_from_the_response(List<String> ids) throws Throwable
 	{
 		for (String id : ids)
@@ -91,7 +91,7 @@ public class ResponseSteps
 				UnomiApiTestRtVariables.storedIds.get(displayableName));
 	}
 
-	@Given("^I extract the ids \"([^\"]*)\" from the response headers$")
+    @Given("I extract the ids {list} from the response headers")
 	public void i_extract_the_ids_from_the_response_headers(List<String> ids) throws Throwable
 	{
 		for (String id : ids)
@@ -110,11 +110,5 @@ public class ResponseSteps
 		}
 	}
 
-	@Then("^the response code is (\\d+)$")
-	public void the_response_code_is(int expectedCode) throws Throwable
-	{
-		Assert.assertEquals(UnomiApiTestRtVariables.response.getStatusCode(), expectedCode,
-				"Status code is not as expected");
-	}
 
 }

@@ -13,14 +13,12 @@ import org.jahia.test.unomiapi.data.UnomiApiTestRtVariables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cucumber.api.DataTable;
 import cucumber.api.java.en.Given;
-import io.restassured.response.Response;
+import io.cucumber.datatable.DataTable;
 
 public class EventSteps
 {
 	Logger logger = LoggerFactory.getLogger(this.getClass());
-	Response response;
 
 	@Given("^I define a unomi context event with the following parameters$")
 	public void i_define_a_unomi_context_event_with_the_following_parameters(
