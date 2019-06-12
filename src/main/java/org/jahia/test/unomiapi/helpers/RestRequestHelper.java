@@ -26,154 +26,133 @@ import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
-public class RestRequestHelper
-{
+public class RestRequestHelper {
 
-	private PrintStream getLogFilePrintStream()
-	{
-		PrintStream writetoLogFile = null;
-		try
-		{
-			File directory = new File(TestGlobalConfiguration.getLogsDirectory());
-			if (!directory.exists())
-				directory.mkdirs();
+    private UnomiApiTestRtVariables unomiApiTestRtVariables;
 
-			FileOutputStream fos = new FileOutputStream(
-					TestGlobalConfiguration.getLogsDirectory() + "/"
-							+ UnomiApiTestRtVariables.scenarioName.replaceAll("\\s+", "_") + ".log",
-					true);
+    public RestRequestHelper(UnomiApiTestRtVariables unomiApiTestRtVariables) {
+        this.unomiApiTestRtVariables = unomiApiTestRtVariables;
+    }
 
-			// adding lines of ===== before each request log for visibility
-			for (int i = 0; i < 3; i++)
-			{
-				fos.write(
-						"=============================================================================================== \n"
-								.getBytes());
-			}
-			// fos.close();
+    private PrintStream getLogFilePrintStream() {
+        PrintStream writetoLogFile = null;
+        try {
+            File directory = new File(TestGlobalConfiguration.getLogsDirectory());
+            if (!directory.exists())
+                directory.mkdirs();
 
-			writetoLogFile = new PrintStream(fos);
-		}
-		catch (FileNotFoundException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return writetoLogFile;
-	}
+            FileOutputStream fos = new FileOutputStream(TestGlobalConfiguration.getLogsDirectory() + "/"
+                    + unomiApiTestRtVariables.scenarioName.replaceAll("\\s+", "_") + ".log", true);
 
-	private RequestSpecification basicBuildRequest(ContentType reqContentType)
-	{
-		RequestSpecification req = RestAssured.given().relaxedHTTPSValidation().redirects()
-				.allowCircular(true).and().redirects().max(10).and().redirects().follow(true).with()
-				.contentType(reqContentType);
+            // adding lines of ===== before each request log for visibility
+            for (int i = 0; i < 3; i++) {
+                fos.write("=============================================================================================== \n".getBytes());
+            }
+            // fos.close();
 
-		addCookiesIfAny(req);
+            writetoLogFile = new PrintStream(fos);
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return writetoLogFile;
+    }
 
-		PrintStream writetoLogFile = getLogFilePrintStream();
+    private RequestSpecification basicBuildRequest(ContentType reqContentType) {
+        RequestSpecification req = RestAssured.given().relaxedHTTPSValidation().redirects().allowCircular(true).and().redirects().max(10)
+                .and().redirects().follow(true).with().contentType(reqContentType);
 
-		// if required we log request and response or errors only
-		if (TestGlobalConfiguration.getLogErrorsOnly())
-			if (writetoLogFile != null)
-				req = req.log().ifValidationFails(LogDetail.ALL, true)
-						.filter(new ErrorLoggingFilter(writetoLogFile));
-			else
-				req = req.log().ifValidationFails(LogDetail.ALL, true)
-						.filter(new ErrorLoggingFilter());
-		else
-		{
-			// write all reqs and resps to a file
-			if (writetoLogFile != null)
-				req = req.filter(new RequestLoggingFilter(LogDetail.ALL, writetoLogFile))
-						.filter(new ResponseLoggingFilter(LogDetail.ALL, writetoLogFile));
-			// or directly to system.out if can't
-			else
-				req = req.filter(new RequestLoggingFilter()).filter(new ResponseLoggingFilter());
-		}
+        addCookiesIfAny(req);
 
-		return req;
-	}
+        PrintStream writetoLogFile = getLogFilePrintStream();
 
-	private void addCookiesIfAny(RequestSpecification req)
-	{
-		List<Cookie> cookies = new ArrayList<Cookie>();
+        // if required we log request and response or errors only
+        if (TestGlobalConfiguration.getLogErrorsOnly())
+            if (writetoLogFile != null)
+                req = req.log().ifValidationFails(LogDetail.ALL, true).filter(new ErrorLoggingFilter(writetoLogFile));
+            else
+                req = req.log().ifValidationFails(LogDetail.ALL, true).filter(new ErrorLoggingFilter());
+        else {
+            // write all reqs and resps to a file
+            if (writetoLogFile != null)
+                req = req.filter(new RequestLoggingFilter(LogDetail.ALL, writetoLogFile))
+                .filter(new ResponseLoggingFilter(LogDetail.ALL, writetoLogFile));
+            // or directly to system.out if can't
+            else
+                req = req.filter(new RequestLoggingFilter()).filter(new ResponseLoggingFilter());
+        }
 
-		addCookieIfAny(cookies, "context-profile-id", "profileId");
-		addCookieIfAny(cookies, "JSESSIONID", "JSESSIONID");
-		addCookieIfAny(cookies, "wem-session-id", "wem-session-id");
+        return req;
+    }
 
-		req = req.with().cookies(new Cookies(cookies));
+    private void addCookiesIfAny(RequestSpecification req) {
+        List<Cookie> cookies = new ArrayList<>();
 
-	}
+        addCookieIfAny(cookies, "context-profile-id", "profileId");
+        addCookieIfAny(cookies, "JSESSIONID", "JSESSIONID");
+        addCookieIfAny(cookies, "wem-session-id", "wem-session-id");
 
-	public void addCookieIfAny(List<Cookie> cookies, String cookieName, String idStored)
-	{
-		if (UnomiApiTestRtVariables.storedIds.get(idStored) != null)
-		{
-			Cookie contextProfileIdCookie = new Cookie.Builder(cookieName,
-					UnomiApiTestRtVariables.storedIds.get(idStored)).setSecured(false).build();
-			cookies.add(contextProfileIdCookie);
-		}
-	}
+        req = req.with().cookies(new Cookies(cookies));
 
-	public RequestSpecification buildRequest()
-	{
-		return basicBuildRequest(ContentType.JSON);
-	}
+    }
 
-	public RequestSpecification buildRequest(Headers headers)
-	{
-		return basicBuildRequest(ContentType.JSON).with().headers(headers);
-	}
+    public void addCookieIfAny(List<Cookie> cookies, String cookieName, String idStored) {
+        if (unomiApiTestRtVariables.storedIds.get(idStored) != null) {
+            Cookie contextProfileIdCookie = new Cookie.Builder(cookieName, unomiApiTestRtVariables.storedIds.get(idStored))
+                    .setSecured(false).build();
+            cookies.add(contextProfileIdCookie);
+        }
+    }
 
-	public RequestSpecification buildRequest(String username, String password)
-	{
-		return basicBuildRequest(ContentType.JSON).auth().preemptive().basic(username, password);
-	}
+    public RequestSpecification buildRequest() {
+        return basicBuildRequest(ContentType.JSON);
+    }
 
-	public Response sendRequest(RequestSpecification requestSpec, URL url, Object body,
-			HttpMethod httpMethod)
-	{
-		Response response = null;
+    public RequestSpecification buildRequest(Headers headers) {
+        return basicBuildRequest(ContentType.JSON).with().headers(headers);
+    }
 
-		if (body != null)
-			requestSpec = requestSpec.body(body);
+    public RequestSpecification buildRequest(String username, String password) {
+        return basicBuildRequest(ContentType.JSON).auth().preemptive().basic(username, password);
+    }
 
-		if (httpMethod.equals(HttpMethod.GET))
-			response = requestSpec.get(url);
-		else if (httpMethod.equals(HttpMethod.POST))
-			response = requestSpec.post(url);
-		else if (httpMethod.equals(HttpMethod.DELETE))
-			response = requestSpec.delete(url);
-		else if (httpMethod.equals(HttpMethod.PUT))
-			response = requestSpec.put(url);
+    public Response sendRequest(RequestSpecification requestSpec, URL url, Object body, HttpMethod httpMethod) {
+        Response response = null;
 
-		return response;
-	}
+        if (body != null)
+            requestSpec = requestSpec.body(body);
 
-	public Response sendRequest(RequestSpecification requestSpec, URL url, String body,
-			HttpMethod httpMethod)
-	{
-		Response response = null;
+        if (httpMethod.equals(HttpMethod.GET))
+            response = requestSpec.get(url);
+        else if (httpMethod.equals(HttpMethod.POST))
+            response = requestSpec.post(url);
+        else if (httpMethod.equals(HttpMethod.DELETE))
+            response = requestSpec.delete(url);
+        else if (httpMethod.equals(HttpMethod.PUT))
+            response = requestSpec.put(url);
 
-		if (body != null && !body.isEmpty())
-			requestSpec = requestSpec.body(body);
+        return response;
+    }
 
-		if (httpMethod.equals(HttpMethod.GET))
-			response = requestSpec.get(url);
-		else if (httpMethod.equals(HttpMethod.POST))
-			response = requestSpec.post(url);
-		else if (httpMethod.equals(HttpMethod.DELETE))
-			response = requestSpec.delete(url);
-		else if (httpMethod.equals(HttpMethod.PUT))
-			response = requestSpec.put(url);
+    public Response sendRequest(RequestSpecification requestSpec, URL url, String body, HttpMethod httpMethod) {
+        Response response = null;
 
-		return response;
-	}
+        if (body != null && !body.isEmpty())
+            requestSpec = requestSpec.body(body);
+
+        if (httpMethod.equals(HttpMethod.GET))
+            response = requestSpec.get(url);
+        else if (httpMethod.equals(HttpMethod.POST))
+            response = requestSpec.post(url);
+        else if (httpMethod.equals(HttpMethod.DELETE))
+            response = requestSpec.delete(url);
+        else if (httpMethod.equals(HttpMethod.PUT))
+            response = requestSpec.put(url);
+
+        return response;
+    }
 
 }

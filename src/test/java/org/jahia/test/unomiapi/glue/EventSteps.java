@@ -8,111 +8,105 @@ import org.apache.unomi.api.CustomItem;
 import org.apache.unomi.api.Event;
 import org.apache.unomi.api.Profile;
 import org.apache.unomi.api.Session;
+import org.jahia.test.commonutils.misc.BaseSteps;
 import org.jahia.test.unomiapi.data.TestGlobalConfiguration;
 import org.jahia.test.unomiapi.data.UnomiApiTestRtVariables;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import cucumber.api.java.en.Given;
 import io.cucumber.datatable.DataTable;
 
-public class EventSteps
-{
-	Logger logger = LoggerFactory.getLogger(this.getClass());
+public class EventSteps extends BaseSteps {
+    private UnomiApiTestRtVariables unomiApiTestRtVariables;
 
-	@Given("^I define a unomi context event with the following parameters$")
-	public void i_define_a_unomi_context_event_with_the_following_parameters(
-			DataTable eventParamsDt) throws Throwable
-	{
-		String profileId = UnomiApiTestRtVariables.storedIds.get("context-profile-id") != null
-				? UnomiApiTestRtVariables.storedIds.get("context-profile-id")
-				: "";
-		Profile profile = new Profile(profileId);
+    public EventSteps(UnomiApiTestRtVariables unomiApiTestRtVariables) {
+        this.unomiApiTestRtVariables = unomiApiTestRtVariables;
+    }
 
-		Session session;
-		if (UnomiApiTestRtVariables.storedIds.get("wem-session-id") == null)
-			session = null;
-		else
-			session = new Session(UnomiApiTestRtVariables.storedIds.get("wem-session-id"), profile,
-					new Date(), UnomiApiTestRtVariables.scope);
+    @Given("^I define a unomi context event with the following parameters$")
+    public void i_define_a_unomi_context_event_with_the_following_parameters(DataTable eventParamsDt) throws Throwable {
+        String profileId = unomiApiTestRtVariables.storedIds.get("context-profile-id") != null
+                ? unomiApiTestRtVariables.storedIds.get("context-profile-id")
+                        : "";
+                Profile profile = new Profile(profileId);
 
-		Map<String, String> eventParams = eventParamsDt.asMap(String.class, String.class);
-		Event event;
+                Session session;
+                if (unomiApiTestRtVariables.storedIds.get("wem-session-id") == null)
+                    session = null;
+                else
+                    session = new Session(unomiApiTestRtVariables.storedIds.get("wem-session-id"), profile, new Date(),
+                            unomiApiTestRtVariables.scope);
 
-		if (eventParams.get("eventType").equals("view"))
-		{
-			// Initialize context like if you display the first page on the website
+                Map<String, String> eventParams = eventParamsDt.asMap(String.class, String.class);
+                Event event;
 
-			CustomItem target = new CustomItem(UnomiApiTestRtVariables.storedIds.get("pageID"), "page");
-			target.setScope(UnomiApiTestRtVariables.scope);
+                if (eventParams.get("eventType").equals("view")) {
+                    // Initialize context like if you display the first page on the website
 
-			Map<String, Object> pageInfo = new HashMap<>();
-			pageInfo.put("pageID", UnomiApiTestRtVariables.storedIds.get("pageID"));
-			pageInfo.put("nodeType", "jnt:page");
-			pageInfo.put("pageName", eventParams.get("pageName"));
-			pageInfo.put("pagePath", eventParams.get("pagePath"));
-			pageInfo.put("templateName", eventParams.get("templateName"));
-			pageInfo.put("language", UnomiApiTestRtVariables.siteLocale);
-			pageInfo.put("referringURL", "");
+                    CustomItem target = new CustomItem(unomiApiTestRtVariables.storedIds.get("pageID"), "page");
+                    target.setScope(unomiApiTestRtVariables.scope);
 
-			pageInfo.put("destinationUrl",
-					TestGlobalConfiguration.getBaseUrl() + eventParams.get("pagePath"));
+                    Map<String, Object> pageInfo = new HashMap<>();
+                    pageInfo.put("pageID", unomiApiTestRtVariables.storedIds.get("pageID"));
+                    pageInfo.put("nodeType", "jnt:page");
+                    pageInfo.put("pageName", eventParams.get("pageName"));
+                    pageInfo.put("pagePath", eventParams.get("pagePath"));
+                    pageInfo.put("templateName", eventParams.get("templateName"));
+                    pageInfo.put("language", unomiApiTestRtVariables.siteLocale);
+                    pageInfo.put("referringURL", "");
 
-			pageInfo.put("nodeType", "jnt:page");
+                    pageInfo.put("destinationUrl", TestGlobalConfiguration.getBaseUrl() + eventParams.get("pagePath"));
 
-			String[] categories = new String[0];
-			if (eventParams.get("categories") != null)
-				categories = eventParams.get("categories").split(",");
-			pageInfo.put("categories", categories);
+                    pageInfo.put("nodeType", "jnt:page");
 
-			String[] tags = new String[0];
-			if (eventParams.get("tags") != null)
-				tags = eventParams.get("tags").split(",");
-			pageInfo.put("tags", tags);
+                    String[] categories = new String[0];
+                    if (eventParams.get("categories") != null)
+                        categories = eventParams.get("categories").split(",");
+                    pageInfo.put("categories", categories);
 
-			if (eventParams.get("isContentTemplate") != null)
-				pageInfo.put("isContentTemplate",
-						Boolean.parseBoolean(eventParams.get("isContentTemplate")));
-			else
-				pageInfo.put("isContentTemplate", false);
+                    String[] tags = new String[0];
+                    if (eventParams.get("tags") != null)
+                        tags = eventParams.get("tags").split(",");
+                    pageInfo.put("tags", tags);
 
-			Map<String, Object> properties = new HashMap<>();
-			properties.put("pageInfo", pageInfo);
-			target.setProperties(properties);
+                    if (eventParams.get("isContentTemplate") != null)
+                        pageInfo.put("isContentTemplate", Boolean.parseBoolean(eventParams.get("isContentTemplate")));
+                    else
+                        pageInfo.put("isContentTemplate", false);
 
-			CustomItem source = new CustomItem(UnomiApiTestRtVariables.storedIds.get("siteID"), "site");
-			source.setScope(UnomiApiTestRtVariables.scope);
+                    Map<String, Object> properties = new HashMap<>();
+                    properties.put("pageInfo", pageInfo);
+                    target.setProperties(properties);
 
-			event = new Event(eventParams.get("EventType"), session, profile, UnomiApiTestRtVariables.scope,
-					source, target, new Date());
-		}
+                    CustomItem source = new CustomItem(unomiApiTestRtVariables.storedIds.get("siteID"), "site");
+                    source.setScope(unomiApiTestRtVariables.scope);
 
-		else if (eventParams.get("eventType").equals("updateProperties"))
-		{
-			Map<String, Object> properties = new HashMap<>();
-			properties.put("targetType", "profile");
-			properties.put("targetId", UnomiApiTestRtVariables.storedIds.get("context-profile-id"));
+                    event = new Event(eventParams.get("EventType"), session, profile, unomiApiTestRtVariables.scope, source, target, new Date());
+                }
 
-			Map<String, Object> addUpdate = new HashMap<>();
-			for (Map.Entry<String, String> entry : eventParams.entrySet())
-			{
-				if (entry.getKey().startsWith("properties."))
-					addUpdate.put(entry.getKey(), entry.getValue());
-			}
-			properties.put(eventParams.get("updateType"), addUpdate);
+                else if (eventParams.get("eventType").equals("updateProperties")) {
+                    Map<String, Object> properties = new HashMap<>();
+                    properties.put("targetType", "profile");
+                    properties.put("targetId", unomiApiTestRtVariables.storedIds.get("context-profile-id"));
 
-			CustomItem source = new CustomItem("wemProfile", "wemProfile");
-			source.setScope(UnomiApiTestRtVariables.scope);
+                    Map<String, Object> addUpdate = new HashMap<>();
+                    for (Map.Entry<String, String> entry : eventParams.entrySet()) {
+                        if (entry.getKey().startsWith("properties."))
+                            addUpdate.put(entry.getKey(), entry.getValue());
+                    }
+                    properties.put(eventParams.get("updateType"), addUpdate);
 
-			event = new Event(eventParams.get("eventType"), session, profile, UnomiApiTestRtVariables.scope,
-					source, null, properties, new Date(), true);
-		}
+                    CustomItem source = new CustomItem("wemProfile", "wemProfile");
+                    source.setScope(unomiApiTestRtVariables.scope);
 
-		else
-			throw new RuntimeException("EventType unknown, please check the feature file");
+                    event = new Event(eventParams.get("eventType"), session, profile, unomiApiTestRtVariables.scope, source, null, properties,
+                            new Date(), true);
+                }
 
-		UnomiApiTestRtVariables.events.add(event);
+                else
+                    throw new RuntimeException("EventType unknown, please check the feature file");
 
-	}
+                unomiApiTestRtVariables.events.add(event);
+
+    }
 
 }

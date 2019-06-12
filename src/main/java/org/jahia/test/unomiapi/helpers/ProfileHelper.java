@@ -14,14 +14,21 @@ import com.mashape.unirest.http.HttpMethod;
 import io.restassured.specification.RequestSpecification;
 
 public class ProfileHelper {
+
+    private UnomiApiTestRtVariables unomiApiTestRtVariables;
+
+    public ProfileHelper(UnomiApiTestRtVariables unomiApiTestRtVariables) {
+        this.unomiApiTestRtVariables = unomiApiTestRtVariables;
+    }
+
     public Profile getProfile(String user, String password, String profileId) throws Throwable {
         RequestSpecification req = buildProfileRequestSpec(user, password);
 
-        RestRequestHelper reqHelper = new RestRequestHelper();
-        UnomiApiTestRtVariables.response = reqHelper.sendRequest(req,
+        RestRequestHelper reqHelper = new RestRequestHelper(unomiApiTestRtVariables);
+        unomiApiTestRtVariables.response = reqHelper.sendRequest(req,
                 new URL(TestGlobalConfiguration.getUnomiUrl() + "/cxs/profiles/" + profileId), null, HttpMethod.GET);
 
-        Profile profile = CustomObjectMapper.getObjectMapper().readValue(UnomiApiTestRtVariables.response.asString(), Profile.class);
+        Profile profile = CustomObjectMapper.getObjectMapper().readValue(unomiApiTestRtVariables.response.asString(), Profile.class);
 
         return profile;
     }
@@ -29,7 +36,7 @@ public class ProfileHelper {
     private RequestSpecification buildProfileRequestSpec(String user, String password) {
         RequestSpecification req;
 
-        RestRequestHelper reqHelper = new RestRequestHelper();
+        RestRequestHelper reqHelper = new RestRequestHelper(unomiApiTestRtVariables);
         req = reqHelper.buildRequest(user, password);
         return req;
     }
@@ -44,7 +51,7 @@ public class ProfileHelper {
 
     // Will look for current profile in the UnomiApiTestRtVariables
     public boolean doesProfileContainsProperty(String property, String expectedValue) throws Throwable {
-        Profile profile = CustomObjectMapper.getObjectMapper().readValue(UnomiApiTestRtVariables.response.asString(), Profile.class);
+        Profile profile = CustomObjectMapper.getObjectMapper().readValue(unomiApiTestRtVariables.response.asString(), Profile.class);
 
         String actualValue = (String) profile.getProperty(property);
         return actualValue.equals(expectedValue);
@@ -53,7 +60,7 @@ public class ProfileHelper {
     // Will be moved later
     // Assertions should be made in cucumber glue assertion steps "Then"
     public void assertProfileContainsProperties(Map<String, String> propertiesAndValues) throws Throwable {
-        Profile profile = CustomObjectMapper.getObjectMapper().readValue(UnomiApiTestRtVariables.response.asString(), Profile.class);
+        Profile profile = CustomObjectMapper.getObjectMapper().readValue(unomiApiTestRtVariables.response.asString(), Profile.class);
 
         for (Map.Entry<String, String> entry : propertiesAndValues.entrySet()) {
             String expectedProperty = entry.getKey();

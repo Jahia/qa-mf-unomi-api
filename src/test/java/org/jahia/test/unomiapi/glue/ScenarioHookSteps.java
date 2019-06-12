@@ -1,32 +1,35 @@
 package org.jahia.test.unomiapi.glue;
 
+import org.jahia.test.commonutils.misc.BaseSteps;
 import org.jahia.test.unomiapi.data.UnomiApiTestRtVariables;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import cucumber.api.Result.Type;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 
-public class ScenarioHookSteps
+public class ScenarioHookSteps extends BaseSteps
 {
-	Logger logger = LoggerFactory.getLogger(this.getClass());
+    private UnomiApiTestRtVariables unomiApiTestRtVariables;
 
-	@Before
-	public void before(Scenario s)
-	{
-		// reset default values for each scenario further steps in the scenario might change them
-		UnomiApiTestRtVariables.init();
-		UnomiApiTestRtVariables.scenarioName = s.getName();
-	}
+    public ScenarioHookSteps(UnomiApiTestRtVariables unomiApiTestRtVariables) {
+        this.unomiApiTestRtVariables = unomiApiTestRtVariables;
+    }
 
-	@After
-	public void after(Scenario s)
-	{
+    @Before
+    public void before(Scenario s)
+    {
+        // reset default values for each scenario further steps in the scenario might change them
+        unomiApiTestRtVariables.init();
+        unomiApiTestRtVariables.scenarioName = s.getName();
+    }
+
+    @After
+    public void after(Scenario s)
+    {
         if (!s.getStatus().equals(Type.PASSED))
-		{
-			logger.info(String.format("Scenario %s did not pass", s.getName()));
-		}
-	}
+        {
+            logger.info(String.format("Scenario %s did not pass", s.getName()));
+        }
+    }
 }

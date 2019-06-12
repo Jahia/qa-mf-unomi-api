@@ -11,44 +11,41 @@ import org.apache.unomi.api.services.PersonalizationService.PersonalizationReque
 
 import io.restassured.response.Response;
 
-public class UnomiApiTestRtVariables
-{
+public class UnomiApiTestRtVariables {
 
-	// real time scenario variables
-	// initialized each scenario
-	public static Map<String, String> storedIds = new HashMap<String, String>();
-	public static List<Event> events = new ArrayList<Event>();
-	public static List<PersonalizationRequest> personalizationRequests;
-	public static boolean fixtureFailed = false;
-	public static String siteLocale;
-    public static long scenarioStartTimeMillis;
-	public static String scenarioName;
-	public static boolean ensureCleanSession;
-	public static File[] previousFiles;
-	public static File lastDownloadedFile;
-	public static String scope;
-	public static Response response;
+    // real time scenario variables
+    // initialized each scenario
+    public Map<String, String> storedIds = new HashMap<>();
+    public List<Event> events = new ArrayList<>();
+    public List<PersonalizationRequest> personalizationRequests;
+    public boolean fixtureFailed = false;
+    public String siteLocale;
+    public long scenarioStartTimeMillis;
+    public String scenarioName;
+    public boolean ensureCleanSession;
+    public File[] previousFiles;
+    public File lastDownloadedFile;
+    public String scope;
+    public Response response;
 
-	// init all with default values
-	public static void init()
-	{
-		siteLocale = "en";
+    // init all with default values
+    public void init() {
+        siteLocale = "en";
         scenarioStartTimeMillis = System.currentTimeMillis();
-		scenarioName = "undefined";
-		ensureCleanSession = true;
-		previousFiles = null;
-		lastDownloadedFile = null;
-		storedIds = new HashMap<String, String>();
-		events = new ArrayList<Event>();
-		personalizationRequests = new ArrayList<PersonalizationRequest>();
-		scope = "JahiaMfIntegTests";
-		response = null;
-	}
+        scenarioName = "undefined";
+        ensureCleanSession = true;
+        previousFiles = null;
+        lastDownloadedFile = null;
+        storedIds = new HashMap<>();
+        events = new ArrayList<>();
+        personalizationRequests = new ArrayList<>();
+        scope = "JahiaMfIntegTests";
+        response = null;
+    }
 
-	public static void clearContextRequestElements()
-	{
-		events.clear();
-		personalizationRequests.clear();
-	}
+    public void clearContextRequestElements() {
+        events.clear();
+        personalizationRequests.clear();
+    }
 
 }

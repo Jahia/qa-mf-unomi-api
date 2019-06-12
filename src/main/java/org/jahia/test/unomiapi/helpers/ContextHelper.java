@@ -15,42 +15,40 @@ import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.specification.RequestSpecification;
 
-public class ContextHelper
-{
+public class ContextHelper {
+    private final String contextJsonUrl = TestGlobalConfiguration.getUnomiUrl() + "/context.json";
+    private UnomiApiTestRtVariables unomiApiTestRtVariables;
 
-	private final String contextJsonUrl = TestGlobalConfiguration.getUnomiUrl() + "/context.json";
+    public ContextHelper(UnomiApiTestRtVariables unomiApiTestRtVariables) {
+        this.unomiApiTestRtVariables = unomiApiTestRtVariables;
+    }
 
-	public RequestSpecification buildContextRequestSpec()
-	{
-		Header header = new Header("X-Unomi-Peer", TestGlobalConfiguration.getUnomiKey());
+    public RequestSpecification buildContextRequestSpec() {
+        Header header = new Header("X-Unomi-Peer", TestGlobalConfiguration.getUnomiKey());
 
-		RestRequestHelper reqHelper = new RestRequestHelper();
-		return reqHelper.buildRequest(new Headers(header));
-	}
+        RestRequestHelper reqHelper = new RestRequestHelper(unomiApiTestRtVariables);
+        return reqHelper.buildRequest(new Headers(header));
+    }
 
-	public void sendContextRequest(ContextRequest contextRequest) throws MalformedURLException
-	{
-		RequestSpecification req = buildContextRequestSpec();
-		RestRequestHelper reqHelper = new RestRequestHelper();
-		UnomiApiTestRtVariables.response = reqHelper.sendRequest(req, new URL(contextJsonUrl),
-				contextRequest, HttpMethod.POST);
-	}
+    public void sendContextRequest(ContextRequest contextRequest) throws MalformedURLException {
+        RequestSpecification req = buildContextRequestSpec();
+        RestRequestHelper reqHelper = new RestRequestHelper(unomiApiTestRtVariables);
+        unomiApiTestRtVariables.response = reqHelper.sendRequest(req, new URL(contextJsonUrl), contextRequest, HttpMethod.POST);
+    }
 
-	public ContextRequest buildContextRequestObject()
-	{
-		ContextRequest contextRequest = new ContextRequest();
-		contextRequest.setEvents(UnomiApiTestRtVariables.events);
-		contextRequest.setRequiredProfileProperties(Arrays.asList("j:nodename"));
-		contextRequest.setSessionId(UnomiApiTestRtVariables.storedIds.get("wem-session-id"));
+    public ContextRequest buildContextRequestObject() {
+        ContextRequest contextRequest = new ContextRequest();
+        contextRequest.setEvents(unomiApiTestRtVariables.events);
+        contextRequest.setRequiredProfileProperties(Arrays.asList("j:nodename"));
+        contextRequest.setSessionId(unomiApiTestRtVariables.storedIds.get("wem-session-id"));
 
-		CustomItem sourceItem = new CustomItem(UnomiApiTestRtVariables.storedIds.get("pageID"),
-				"page");
-		sourceItem.setScope(UnomiApiTestRtVariables.scope);
-		contextRequest.setSource(sourceItem);
+        CustomItem sourceItem = new CustomItem(unomiApiTestRtVariables.storedIds.get("pageID"), "page");
+        sourceItem.setScope(unomiApiTestRtVariables.scope);
+        contextRequest.setSource(sourceItem);
 
-		contextRequest.setPersonalizations(UnomiApiTestRtVariables.personalizationRequests);
+        contextRequest.setPersonalizations(unomiApiTestRtVariables.personalizationRequests);
 
-		return contextRequest;
+        return contextRequest;
 
-	}
+    }
 }
