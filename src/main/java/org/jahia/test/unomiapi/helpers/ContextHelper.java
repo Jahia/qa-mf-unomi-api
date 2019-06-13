@@ -7,7 +7,7 @@ import java.util.Arrays;
 import org.apache.unomi.api.ContextRequest;
 import org.apache.unomi.api.CustomItem;
 import org.jahia.test.unomiapi.data.TestGlobalConfiguration;
-import org.jahia.test.unomiapi.data.UnomiApiTestRtVariables;
+import org.jahia.test.unomiapi.data.UnomiApiScenarioRuntimeData;
 
 import com.mashape.unirest.http.HttpMethod;
 
@@ -17,36 +17,36 @@ import io.restassured.specification.RequestSpecification;
 
 public class ContextHelper {
     private final String contextJsonUrl = TestGlobalConfiguration.getUnomiUrl() + "/context.json";
-    private UnomiApiTestRtVariables unomiApiTestRtVariables;
+    private UnomiApiScenarioRuntimeData unomiApiScenarioRuntimeData;
 
-    public ContextHelper(UnomiApiTestRtVariables unomiApiTestRtVariables) {
-        this.unomiApiTestRtVariables = unomiApiTestRtVariables;
+    public ContextHelper(UnomiApiScenarioRuntimeData unomiApiScenarioRuntimeData) {
+        this.unomiApiScenarioRuntimeData = unomiApiScenarioRuntimeData;
     }
 
     public RequestSpecification buildContextRequestSpec() {
         Header header = new Header("X-Unomi-Peer", TestGlobalConfiguration.getUnomiKey());
 
-        RestRequestHelper reqHelper = new RestRequestHelper(unomiApiTestRtVariables);
+        RestRequestHelper reqHelper = new RestRequestHelper(unomiApiScenarioRuntimeData);
         return reqHelper.buildRequest(new Headers(header));
     }
 
     public void sendContextRequest(ContextRequest contextRequest) throws MalformedURLException {
         RequestSpecification req = buildContextRequestSpec();
-        RestRequestHelper reqHelper = new RestRequestHelper(unomiApiTestRtVariables);
-        unomiApiTestRtVariables.response = reqHelper.sendRequest(req, new URL(contextJsonUrl), contextRequest, HttpMethod.POST);
+        RestRequestHelper reqHelper = new RestRequestHelper(unomiApiScenarioRuntimeData);
+        unomiApiScenarioRuntimeData.setResponse(reqHelper.sendRequest(req, new URL(contextJsonUrl), contextRequest, HttpMethod.POST));
     }
 
     public ContextRequest buildContextRequestObject() {
         ContextRequest contextRequest = new ContextRequest();
-        contextRequest.setEvents(unomiApiTestRtVariables.events);
+        contextRequest.setEvents(unomiApiScenarioRuntimeData.getEvents());
         contextRequest.setRequiredProfileProperties(Arrays.asList("j:nodename"));
-        contextRequest.setSessionId(unomiApiTestRtVariables.storedIds.get("wem-session-id"));
+        contextRequest.setSessionId(unomiApiScenarioRuntimeData.getStoredIds().get("wem-session-id"));
 
-        CustomItem sourceItem = new CustomItem(unomiApiTestRtVariables.storedIds.get("pageID"), "page");
-        sourceItem.setScope(unomiApiTestRtVariables.scope);
+        CustomItem sourceItem = new CustomItem(unomiApiScenarioRuntimeData.getStoredIds().get("pageID"), "page");
+        sourceItem.setScope(unomiApiScenarioRuntimeData.getScope());
         contextRequest.setSource(sourceItem);
 
-        contextRequest.setPersonalizations(unomiApiTestRtVariables.personalizationRequests);
+        contextRequest.setPersonalizations(unomiApiScenarioRuntimeData.getPersonalizationRequests());
 
         return contextRequest;
 

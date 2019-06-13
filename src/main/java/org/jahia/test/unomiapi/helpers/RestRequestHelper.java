@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jahia.test.unomiapi.data.TestGlobalConfiguration;
-import org.jahia.test.unomiapi.data.UnomiApiTestRtVariables;
+import org.jahia.test.unomiapi.data.UnomiApiScenarioRuntimeData;
 
 import com.mashape.unirest.http.HttpMethod;
 
@@ -28,10 +28,10 @@ import io.restassured.specification.RequestSpecification;
 
 public class RestRequestHelper {
 
-    private UnomiApiTestRtVariables unomiApiTestRtVariables;
+    private UnomiApiScenarioRuntimeData unomiApiScenarioRuntimeData;
 
-    public RestRequestHelper(UnomiApiTestRtVariables unomiApiTestRtVariables) {
-        this.unomiApiTestRtVariables = unomiApiTestRtVariables;
+    public RestRequestHelper(UnomiApiScenarioRuntimeData unomiApiScenarioRuntimeData) {
+        this.unomiApiScenarioRuntimeData = unomiApiScenarioRuntimeData;
     }
 
     private PrintStream getLogFilePrintStream() {
@@ -42,7 +42,7 @@ public class RestRequestHelper {
                 directory.mkdirs();
 
             FileOutputStream fos = new FileOutputStream(TestGlobalConfiguration.getLogsDirectory() + "/"
-                    + unomiApiTestRtVariables.scenarioName.replaceAll("\\s+", "_") + ".log", true);
+                    + unomiApiScenarioRuntimeData.getScenarioName().replaceAll("\\s+", "_") + ".log", true);
 
             // adding lines of ===== before each request log for visibility
             for (int i = 0; i < 3; i++) {
@@ -100,8 +100,8 @@ public class RestRequestHelper {
     }
 
     public void addCookieIfAny(List<Cookie> cookies, String cookieName, String idStored) {
-        if (unomiApiTestRtVariables.storedIds.get(idStored) != null) {
-            Cookie contextProfileIdCookie = new Cookie.Builder(cookieName, unomiApiTestRtVariables.storedIds.get(idStored))
+        if (unomiApiScenarioRuntimeData.getStoredIds().get(idStored) != null) {
+            Cookie contextProfileIdCookie = new Cookie.Builder(cookieName, unomiApiScenarioRuntimeData.getStoredIds().get(idStored))
                     .setSecured(false).build();
             cookies.add(contextProfileIdCookie);
         }
