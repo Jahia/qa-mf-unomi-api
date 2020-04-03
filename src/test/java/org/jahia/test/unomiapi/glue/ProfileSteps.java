@@ -30,6 +30,12 @@ public class ProfileSteps extends BaseSteps {
     public void i_get_the_current_profile_properties_using_the_Unomi_API_and_user(String user, String password) throws Throwable {
         // call to the qa mf unomi api test method
         ProfileHelper profileHelper = new ProfileHelper(unomiApiScenarioRuntimeData);
+        String profileId = browserHelper.getCookieValue("wem-profile-id");
+
+        if (profileId == null) {
+            throw new IllegalStateException("Profile id must not be null to get profile in the Unomi API");
+        }
+
         profile = profileHelper.getProfile(user, password, browserHelper.getCookieValue("wem-profile-id"));
         Assert.assertNotNull(profile, String.format("Could not retrieve profile corresponding to %s . Check the logs",
                 browserHelper.getCookieValue("wem-profile-id")));
