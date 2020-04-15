@@ -34,6 +34,16 @@ public class ProfileHelper {
         return profile;
     }
 
+    public int getNbProfiles(String user, String password) throws Throwable {
+        RequestSpecification req = buildProfileRequestSpec(user, password);
+
+        RestRequestHelper reqHelper = new RestRequestHelper(unomiApiScenarioRuntimeData);
+        unomiApiScenarioRuntimeData.setResponse(
+                reqHelper.sendRequest(req, new URL(TestGlobalConfiguration.getUnomiUrl() + "/cxs/profiles/count"), null, HttpMethod.GET));
+
+        return Integer.parseInt(unomiApiScenarioRuntimeData.getResponse().asString());
+    }
+
     private RequestSpecification buildProfileRequestSpec(String user, String password) {
         RequestSpecification req;
 
@@ -73,4 +83,5 @@ public class ProfileHelper {
             Assert.assertEquals(actualValue, expectedValue);
         }
     }
+
 }

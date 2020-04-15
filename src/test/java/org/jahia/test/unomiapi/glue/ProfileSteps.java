@@ -10,6 +10,7 @@ import org.jahia.test.unomiapi.data.UnomiApiScenarioRuntimeData;
 import org.jahia.test.unomiapi.helpers.ProfileHelper;
 import org.testng.Assert;
 
+import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.cucumber.datatable.DataTable;
@@ -25,6 +26,8 @@ public class ProfileSteps extends BaseSteps {
     }
 
     Profile profile;
+    int nbProfiles;
+
 
     @When("^I get the current profile properties using the Unomi API and user \"([^\"]*)\" \"([^\"]*)\"$")
     public void i_get_the_current_profile_properties_using_the_Unomi_API_and_user(String user, String password) throws Throwable {
@@ -39,6 +42,22 @@ public class ProfileSteps extends BaseSteps {
         profile = profileHelper.getProfile(user, password, browserHelper.getCookieValue("wem-profile-id"));
         Assert.assertNotNull(profile, String.format("Could not retrieve profile corresponding to %s . Check the logs",
                 browserHelper.getCookieValue("wem-profile-id")));
+    }
+
+    @Given("I observe the number of profiles using the Unomi API and user {string} and password {string}")
+    public void i_observe_the_number_of_profiles_using_the_Unomi_API_and_user_and_password(String user, String password) throws Throwable {
+        ProfileHelper profileHelper = new ProfileHelper(unomiApiScenarioRuntimeData);
+        nbProfiles = profileHelper.getNbProfiles(user, password);
+    }
+
+    @Then("The total number of profiles retrieved with the Unomi API and user {string} and password {string} has been incremented")
+    public void the_total_number_of_profiles_retrieved_with_the_Unomi_API_and_user_and_password_has_been_incremented(String user,
+            String password) throws Throwable {
+        ProfileHelper profileHelper = new ProfileHelper(unomiApiScenarioRuntimeData);
+        int newNbProfiles = profileHelper.getNbProfiles(user, password);
+        Assert.assertTrue(newNbProfiles > nbProfiles,
+                String.format("Nb profiles has not been incremented as expected old value: %d, new value: %d", nbProfiles, newNbProfiles));
+        nbProfiles = newNbProfiles;
     }
 
     @Then("^The profile properties retrieved with the API contains the following properties and values$")
