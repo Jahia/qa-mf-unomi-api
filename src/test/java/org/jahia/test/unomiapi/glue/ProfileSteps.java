@@ -77,6 +77,23 @@ public class ProfileSteps extends BaseSteps {
 
     }
 
+    @Then("^The profile properties retrieved with the API contains the following interests and values$")
+    public void the_profile_properties_retrieved_with_the_API_contains_the_following_interests_and_values(DataTable interestsDt)
+            throws Throwable {
+        ProfileHelper profileHelper = new ProfileHelper(unomiApiScenarioRuntimeData);
+
+        for (Map.Entry<String, String> entry : Util
+                .convertCucumberDtToMap(interestsDt, unomiApiScenarioRuntimeData.getScenarioStartTimeMillis()).entrySet()) {
+            String interest = entry.getKey();
+            int expectedValue = Integer.parseInt(entry.getValue());
+
+            // call to the qa mf unomi api test method
+            Assert.assertTrue(profileHelper.doesProfileContainInterest(profile, interest, expectedValue),
+                    String.format("Interest %s with value %s not found in the profile, check the logs", interest, expectedValue));
+        }
+
+    }
+
     @Then("^The profile properties retrieved with the API does not contain the following properties and values$")
     public void the_profile_properties_retrieved_with_the_API_does_not_contain_the_following_properties_and_values(DataTable propertiesDt)
             throws Throwable {

@@ -60,6 +60,15 @@ public class ProfileHelper {
         return actualValue.equals(expectedValue);
     }
 
+    public boolean doesProfileContainInterest(Profile profile, String interest, int expectedValue) throws Throwable {
+
+        Map<String, Integer> interests = (Map<String, Integer>) profile.getProperty("interests");
+
+        if (interests == null || interests.get(interest) == null)
+            return false;
+        return interests.get(interest).equals(expectedValue);
+    }
+
     // Will look for current profile in the unomiApiScenarioRuntimeData
     public boolean doesProfileContainsProperty(String property, String expectedValue) throws Throwable {
         Profile profile = CustomObjectMapper.getObjectMapper().readValue(unomiApiScenarioRuntimeData.getResponse().asString(),
