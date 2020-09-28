@@ -5,7 +5,7 @@ import java.util.Map;
 import org.apache.unomi.api.Profile;
 import org.jahia.test.commonutils.misc.BaseSteps;
 import org.jahia.test.commonutils.misc.Util;
-import org.jahia.test.commonutils.seleniumutils.BrowserHelper;
+import org.jahia.test.mfselenium.seleniumutils.BrowserHelper;
 import org.jahia.test.unomiapi.data.UnomiApiScenarioRuntimeData;
 import org.jahia.test.unomiapi.helpers.ProfileHelper;
 import org.testng.Assert;
