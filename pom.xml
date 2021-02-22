@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>qa-mf-unomi-api</artifactId>
     <groupId>org.jahia.test</groupId>
-    <version>1.5.0-SNAPSHOT</version>
+    <version>1.5.5-SNAPSHOT</version>
     <name>Unomi Api tests</name>
 
     <properties>
@@ -18,10 +18,10 @@
         <!-- Selenium GLOBAL variables initialization: leave them empty or put a default value -->
         <!-- If you add a property here, add it ALSO in selenium-tests-execution parameters -->
         <!-- Browser specific parameter must be added below in the respective profile -->
-        <jahia.host>sneaker.jahia.com</jahia.host>
+        <jahia.host>sneaker.int.jahia.com</jahia.host>
         <jahia.port></jahia.port>
         <jahia.protocol>https</jahia.protocol>
-        <unomi.host>rangers.jahia.com</unomi.host>
+        <unomi.host>rangers.int.jahia.com</unomi.host>
         <unomi.port></unomi.port>
         <unomi.protocol>https</unomi.protocol>
         <jahia.context></jahia.context>
@@ -108,12 +108,12 @@
         <dependency>
             <groupId>org.apache.unomi</groupId>
             <artifactId>unomi-api</artifactId>
-            <version>1.4.0-incubating-SNAPSHOT</version>
+            <version>1.5.5-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.unomi</groupId>
             <artifactId>unomi-persistence-spi</artifactId>
-            <version>1.4.0-incubating-SNAPSHOT</version>
+            <version>1.5.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
