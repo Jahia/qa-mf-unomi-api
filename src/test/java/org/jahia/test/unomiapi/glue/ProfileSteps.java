@@ -5,7 +5,6 @@ import java.util.Map;
 import org.apache.unomi.api.Profile;
 import org.jahia.test.commonutils.misc.BaseSteps;
 import org.jahia.test.commonutils.misc.Util;
-import org.jahia.test.mfselenium.seleniumutils.BrowserHelper;
 import org.jahia.test.unomiapi.data.UnomiApiScenarioRuntimeData;
 import org.jahia.test.unomiapi.helpers.ProfileHelper;
 import org.testng.Assert;
@@ -18,30 +17,27 @@ import io.cucumber.datatable.DataTable;
 public class ProfileSteps extends BaseSteps {
 
     private UnomiApiScenarioRuntimeData unomiApiScenarioRuntimeData;
-    private BrowserHelper browserHelper;
 
-    public ProfileSteps(UnomiApiScenarioRuntimeData unomiApiScenarioRuntimeData, BrowserHelper browserHelper) {
+    public ProfileSteps(UnomiApiScenarioRuntimeData unomiApiScenarioRuntimeData) {
+
+        if (unomiApiScenarioRuntimeData == null) {
+            unomiApiScenarioRuntimeData = new UnomiApiScenarioRuntimeData();
+        }
+
         this.unomiApiScenarioRuntimeData = unomiApiScenarioRuntimeData;
-        this.browserHelper = browserHelper;
     }
 
     Profile profile;
     int nbProfiles;
 
-
-    @When("^I get the current profile properties using the Unomi API and user \"([^\"]*)\" \"([^\"]*)\"$")
-    public void i_get_the_current_profile_properties_using_the_Unomi_API_and_user(String user, String password) throws Throwable {
+    @When("^I get the profile properties using the Unomi API the profile id \"([^\"]*)\" and user \"([^\"]*)\" \"([^\"]*)\"$")
+    public void i_get_the_profile_properties_using_the_Unomi_API_the_profile_id_and_user(String profileId, String user, String password)
+            throws Throwable {
         // call to the qa mf unomi api test method
         ProfileHelper profileHelper = new ProfileHelper(unomiApiScenarioRuntimeData);
-        String profileId = browserHelper.getCookieValue("wem-profile-id");
 
-        if (profileId == null) {
-            throw new IllegalStateException("Profile id must not be null to get profile in the Unomi API");
-        }
-
-        profile = profileHelper.getProfile(user, password, browserHelper.getCookieValue("wem-profile-id"));
-        Assert.assertNotNull(profile, String.format("Could not retrieve profile corresponding to %s . Check the logs",
-                browserHelper.getCookieValue("wem-profile-id")));
+        profile = profileHelper.getProfile(user, password, profileId);
+        Assert.assertNotNull(profile, String.format("Could not retrieve profile corresponding to %s . Check the logs", profileId));
     }
 
     @Given("I observe the number of profiles using the Unomi API and user {string} and password {string}")
