@@ -14,9 +14,12 @@ import org.jahia.test.unomiapi.data.UnomiApiScenarioRuntimeData;
 
 import cucumber.api.java.en.Given;
 import io.cucumber.datatable.DataTable;
+import org.jahia.test.unomiapi.helpers.EventHelper;
+import org.testng.Assert;
 
 public class EventSteps extends BaseSteps {
     private UnomiApiScenarioRuntimeData unomiApiScenarioRuntimeData;
+    private int nbViewForTestedPage = -1;
 
     public EventSteps(UnomiApiScenarioRuntimeData unomiApiScenarioRuntimeData) {
         this.unomiApiScenarioRuntimeData = unomiApiScenarioRuntimeData;
@@ -109,6 +112,20 @@ public class EventSteps extends BaseSteps {
 
         unomiApiScenarioRuntimeData.getEvents().add(event);
 
+    }
+
+    @Given("I get the number of page view by API for page {string} with credentials {string} {string}")
+    public void i_read_the_number_of_page_views(String pagePath,String user, String password) throws Throwable {
+        EventHelper eventHelper = new EventHelper(unomiApiScenarioRuntimeData);
+        nbViewForTestedPage = eventHelper.getNumberOfViewForPage(pagePath,user,password);
+    }
+
+    @Given("The number of view is incremented for page {string} by API with credentials {string} {string}")
+    public void the_number_of_occurences_for_page_has_been_incremented(String pagePath,String user, String password) throws Throwable {
+        EventHelper eventHelper = new EventHelper(unomiApiScenarioRuntimeData);
+        int newNbViewForTestedPage = eventHelper.getNumberOfViewForPage(pagePath,user,password);
+        Assert.assertEquals(newNbViewForTestedPage, nbViewForTestedPage+1,
+                String.format("Nb of page view has not been incremented as expected old value: %d, new value: %d", nbViewForTestedPage, newNbViewForTestedPage));
     }
 
 }
