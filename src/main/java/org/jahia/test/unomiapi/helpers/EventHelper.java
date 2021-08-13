@@ -1,11 +1,14 @@
 package org.jahia.test.unomiapi.helpers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.mashape.unirest.http.HttpMethod;
 import io.restassured.specification.RequestSpecification;
+import org.jahia.test.unomiapi.data.Event.Condition;
+import org.jahia.test.unomiapi.data.Event.EventListRequest;
 import org.jahia.test.unomiapi.data.TestGlobalConfiguration;
 import org.jahia.test.unomiapi.data.UnomiApiScenarioRuntimeData;
-
-import java.sql.Timestamp;
+import org.jahia.test.unomiapi.data.Event.ParameterValues;
 
 import java.net.URL;
 import java.time.Instant;
@@ -24,22 +27,20 @@ public class EventHelper {
         RequestSpecification req = buildNbofViewRequestSpec(partialPagePath, user, password);
 
         Instant now = Instant.now();
-        Instant yesterday = now.minus(1, ChronoUnit.DAYS);
-        yesterday.toEpochMilli();
+        Long minTime = now.minus(1, ChronoUnit.DAYS).toEpochMilli();
+        Long maxTime = now.plus(1, ChronoUnit.DAYS).toEpochMilli();
 
-        Instant tomorrow = now.plus(1, ChronoUnit.DAYS);
-        tomorrow.toEpochMilli();
+        ParameterValues parameterValues = new ParameterValues("between", "timeStamp", minTime, maxTime);
+        Condition condition = new Condition("sessionPropertyCondition", parameterValues);
+        EventListRequest eventRequest = new EventListRequest(condition);
 
-        // TODO : change to object
-        String requestBody = "{\"condition\": {\n" + "\t\t\"parameterValues\": {\n" + "\t\t\t\"comparisonOperator\": \"between\",\n"
-                + "\t\t\t\t\"propertyName\": \"timeStamp\",\n" + "\t\t\t\t\t\"propertyValues\": [\n" + "" + yesterday.toEpochMilli()
-                + ","+tomorrow.toEpochMilli()+"\n" + "\t\t\t\t\t\t]\n" + "\t\t\t\t\t},\n"
-                + "\"type\": \"sessionPropertyCondition\"}}";
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String requestBodyJson = ow.writeValueAsString(eventRequest);
 
         RestRequestHelper reqHelper = new RestRequestHelper(unomiApiScenarioRuntimeData);
         unomiApiScenarioRuntimeData.setResponse(reqHelper.sendRequest(req,
                 new URL(TestGlobalConfiguration.getUnomiUrl() + "/cxs/query/event/target.properties.pageInfo.destinationURL"),
-                requestBody, HttpMethod.POST));
+                requestBodyJson, HttpMethod.POST));
 
         String response = this.unomiApiScenarioRuntimeData.getResponse().asString();
 
