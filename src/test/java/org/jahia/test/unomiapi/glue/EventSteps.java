@@ -49,12 +49,12 @@ public class EventSteps extends BaseSteps {
             target.setScope(unomiApiScenarioRuntimeData.getScope());
 
                     Map<String, Object> pageInfo = new HashMap<>();
-            pageInfo.put("pageID", unomiApiScenarioRuntimeData.getStoredIds().get("pageID"));
+                    pageInfo.put("pageID", unomiApiScenarioRuntimeData.getStoredIds().get("pageID"));
                     pageInfo.put("nodeType", "jnt:page");
                     pageInfo.put("pageName", eventParams.get("pageName"));
                     pageInfo.put("pagePath", eventParams.get("pagePath"));
                     pageInfo.put("templateName", eventParams.get("templateName"));
-            pageInfo.put("language", unomiApiScenarioRuntimeData.getSiteLocale());
+                    pageInfo.put("language", unomiApiScenarioRuntimeData.getSiteLocale());
                     pageInfo.put("referringURL", "");
 
                     pageInfo.put("destinationUrl", TestGlobalConfiguration.getBaseUrl() + eventParams.get("pagePath"));

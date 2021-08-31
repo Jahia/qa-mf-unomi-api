@@ -4,7 +4,6 @@ import com.mashape.unirest.http.HttpMethod;
 import io.restassured.specification.RequestSpecification;
 import org.jahia.test.unomiapi.data.TestGlobalConfiguration;
 import org.jahia.test.unomiapi.data.UnomiApiScenarioRuntimeData;
-import org.jahia.selenium;
 import org.json.JSONObject;
 
 import java.net.URL;
