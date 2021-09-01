@@ -54,7 +54,7 @@ public class EventHelper {
 
         // As we dont know the full url here we have to find it from the partialPath
 
-        String lookupKey = "";
+        String lookupKey = null;
 
         while (keys.hasNext()) {
             String key =  keys.next();
@@ -65,12 +65,7 @@ public class EventHelper {
         }
 
         // When the page has never been seen, it is not displayed in the list of page views
-        if (lookupKey.isEmpty()){
-            return 0;
-        }
-
-        String value = responseJson.get(lookupKey).toString();
-        return Integer.parseInt(value);
+        return lookupKey !=null ? Integer.parseInt(responseJson.get(lookupKey).toString()) : 0;
 
     }
 

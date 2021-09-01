@@ -113,20 +113,12 @@ public class EventSteps extends BaseSteps {
 
     }
 
-    @Given("The number of view is 1 for page {string} by API with credentials {string} {string}")
-    public void the_number_of_occurences_for_page_is_one(String pagePath,String user, String password) throws Throwable {
+    @Given("The number of view is {int} for page {string} by API with credentials {string} {string}")
+    public void the_number_of_occurences_for_page_is_zero(int expectedNb, String pagePath,String user, String password) throws Throwable {
         EventHelper eventHelper = new EventHelper(unomiApiScenarioRuntimeData);
         int newNbViewForTestedPage = eventHelper.getNumberOfViewForPage(pagePath,user,password);
-        Assert.assertEquals(newNbViewForTestedPage, 1,
-                String.format("Nb of page view has not been incremented as expected expected 1, found: %d", newNbViewForTestedPage));
-    }
-
-    @Given("The number of view is 0 for page {string} by API with credentials {string} {string}")
-    public void the_number_of_occurences_for_page_is_zero(String pagePath,String user, String password) throws Throwable {
-        EventHelper eventHelper = new EventHelper(unomiApiScenarioRuntimeData);
-        int newNbViewForTestedPage = eventHelper.getNumberOfViewForPage(pagePath,user,password);
-        Assert.assertEquals(newNbViewForTestedPage, 0,
-                String.format("Nb of page view should be 0, found: %d", newNbViewForTestedPage));
+        Assert.assertEquals(newNbViewForTestedPage, expectedNb,
+                String.format("Nb of page view should be %d, found: %d", expectedNb, newNbViewForTestedPage));
     }
 
 }
