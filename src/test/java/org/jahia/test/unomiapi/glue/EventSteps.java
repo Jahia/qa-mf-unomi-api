@@ -14,6 +14,8 @@ import org.jahia.test.unomiapi.data.UnomiApiScenarioRuntimeData;
 
 import cucumber.api.java.en.Given;
 import io.cucumber.datatable.DataTable;
+import org.jahia.test.unomiapi.helpers.EventHelper;
+import org.testng.Assert;
 
 public class EventSteps extends BaseSteps {
     private UnomiApiScenarioRuntimeData unomiApiScenarioRuntimeData;
@@ -46,12 +48,12 @@ public class EventSteps extends BaseSteps {
             target.setScope(unomiApiScenarioRuntimeData.getScope());
 
                     Map<String, Object> pageInfo = new HashMap<>();
-            pageInfo.put("pageID", unomiApiScenarioRuntimeData.getStoredIds().get("pageID"));
+                    pageInfo.put("pageID", unomiApiScenarioRuntimeData.getStoredIds().get("pageID"));
                     pageInfo.put("nodeType", "jnt:page");
                     pageInfo.put("pageName", eventParams.get("pageName"));
                     pageInfo.put("pagePath", eventParams.get("pagePath"));
                     pageInfo.put("templateName", eventParams.get("templateName"));
-            pageInfo.put("language", unomiApiScenarioRuntimeData.getSiteLocale());
+                    pageInfo.put("language", unomiApiScenarioRuntimeData.getSiteLocale());
                     pageInfo.put("referringURL", "");
 
                     pageInfo.put("destinationUrl", TestGlobalConfiguration.getBaseUrl() + eventParams.get("pagePath"));
@@ -109,6 +111,14 @@ public class EventSteps extends BaseSteps {
 
         unomiApiScenarioRuntimeData.getEvents().add(event);
 
+    }
+
+    @Given("The number of view is {int} for page {string} by API with credentials {string} {string}")
+    public void the_number_of_occurences_for_page_is_zero(int expectedNb, String pagePath,String user, String password) throws Throwable {
+        EventHelper eventHelper = new EventHelper(unomiApiScenarioRuntimeData);
+        int newNbViewForTestedPage = eventHelper.getNumberOfViewForPage(pagePath,user,password);
+        Assert.assertEquals(newNbViewForTestedPage, expectedNb,
+                String.format("Nb of page view should be %d, found: %d", expectedNb, newNbViewForTestedPage));
     }
 
 }
