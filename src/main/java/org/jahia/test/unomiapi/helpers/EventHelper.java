@@ -2,6 +2,7 @@ package org.jahia.test.unomiapi.helpers;
 
 import com.mashape.unirest.http.HttpMethod;
 import io.restassured.specification.RequestSpecification;
+import org.apache.commons.lang3.StringUtils;
 import org.jahia.test.unomiapi.data.TestGlobalConfiguration;
 import org.jahia.test.unomiapi.data.UnomiApiScenarioRuntimeData;
 import org.json.JSONObject;
@@ -10,6 +11,7 @@ import java.net.URL;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.Iterator;
 
 public class EventHelper {
 
@@ -47,24 +49,29 @@ public class EventHelper {
                 requestBodyJson, HttpMethod.POST));
 
         String response = this.unomiApiScenarioRuntimeData.getResponse().asString();
+        JSONObject responseJson = new JSONObject(response);
+        Iterator<String> keys = responseJson.keys();
 
+        // As we dont know the full url here we have to find it from the partialPath
 
+        String lookupKey = "";
 
-        // TODO : read response as object
-        // JSONObject responseJson = new JSONObject(response);
-        // Here we have only a partialPath (ex: "JahiaMfIntegTests/home/perso-on-goal-page.html" instead of
-        // "http://localhost:8080/sites/JahiaMfIntegTests/home/perso-on-goal-page.html")
-        // A simple get("http://localhost:8080/sites/JahiaMfIntegTests/home/perso-on-goal-page.html") does not work
-        // A solution i was trying was to pass JahiaSeleniumConfiguration.getPropertyValue("Dselenium.jahia.host","") but JahiaSeleniumConfiguration
-        // is not recognized
-        // impacted feature to test : mostVisitedPage.feature
-        // branch for the qa-mf-selenium side of this task  https://github.com/Jahia/qa-mf-selenium/tree/DMF-4868_RemoveUITestMostVisitedPages
-
-        if(response.indexOf(partialPagePath) <0 ) {return 0; }
-        else {
-            String test = response.split(partialPagePath + "\":")[1];
-            return Integer.parseInt(test.split(",")[0]);
+        while (keys.hasNext()) {
+            String key =  keys.next();
+            if (StringUtils.endsWith(key, partialPagePath)) {
+                lookupKey = key;
+                break;
+            }
         }
+
+        // When the page has never been seen, it is not displayed in the list of page views
+        if (lookupKey.isEmpty()){
+            return 0;
+        }
+
+        String value = responseJson.get(lookupKey).toString();
+        return Integer.parseInt(value);
+
     }
 
     private RequestSpecification buildNbofViewRequestSpec(String pagePath, String user, String password) {
