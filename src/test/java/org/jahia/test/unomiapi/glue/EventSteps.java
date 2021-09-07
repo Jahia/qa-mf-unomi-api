@@ -114,11 +114,19 @@ public class EventSteps extends BaseSteps {
     }
 
     @Given("The number of view is {int} for page {string} by API with credentials {string} {string}")
-    public void the_number_of_occurences_for_page_is_zero(int expectedNb, String pagePath,String user, String password) throws Throwable {
+    public void the_number_of_occurences_for_page_is(int expectedNb, String pagePath,String user, String password) throws Throwable {
         EventHelper eventHelper = new EventHelper(unomiApiScenarioRuntimeData);
         int newNbViewForTestedPage = eventHelper.getNumberOfViewForPage(pagePath,user,password);
         Assert.assertEquals(newNbViewForTestedPage, expectedNb,
                 String.format("Nb of page view should be %d, found: %d", expectedNb, newNbViewForTestedPage));
+    }
+
+    @Given("The number of occurences for referrer {string} is {int} by API with credentials {string} {string}")
+    public void the_number_of_occurences_for_referrer(String referrer,int expectedNb, String user, String password) throws Throwable {
+        EventHelper eventHelper = new EventHelper(unomiApiScenarioRuntimeData);
+        int newNbOccurenceForReferrer = eventHelper.getNumberOfOccurenceForReferrer(referrer,user,password);
+        Assert.assertEquals(newNbOccurenceForReferrer, expectedNb,
+                String.format("Nb of occurence should be %d, found: %d", expectedNb, newNbOccurenceForReferrer));
     }
 
 }
