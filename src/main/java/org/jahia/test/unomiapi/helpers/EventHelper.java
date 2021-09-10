@@ -23,7 +23,7 @@ public class EventHelper {
 
     public int getNumberOfViewForPage(String partialPagePath, String user, String password) throws Throwable {
 
-        RequestSpecification req = buildNbofViewRequestSpec(partialPagePath, user, password);
+        RequestSpecification req = buildNbofViewRequestSpec(user, password);
 
         Instant now = Instant.now();
         Long minTime = now.minus(1, ChronoUnit.DAYS).toEpochMilli();
@@ -71,7 +71,7 @@ public class EventHelper {
 
     public int getNumberOfOccurenceForReferrer(String referrer, String user, String password) throws Throwable {
 
-        RequestSpecification req = buildNbofViewRequestSpec(referrer, user, password);
+        RequestSpecification req = buildNbofViewRequestSpec(user, password);
 
         Instant now = Instant.now();
         Long minTime = now.minus(1, ChronoUnit.DAYS).toEpochMilli();
