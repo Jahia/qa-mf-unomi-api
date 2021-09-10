@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import java.net.URL;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -117,9 +118,110 @@ public class EventHelper {
 
     }
 
+    /**
+     * Retrieve the number of occurence for a searched keyword
+     * @param keyword the word to search
+     * @param lang the language filter set it empty for not using it
+     * @param scope the language filter set it empty for not using it
+     * @param user karaf username
+     * @param password karaf password
+     * @return the number of occurence for the keyword
+     * @throws Throwable
+     */
+    public int getNumberOfSearchesForKeyword(String keyword, String lang, String scope, String user, String password) throws Throwable {
+
+        RequestSpecification req = buildNbofViewRequestSpec( user, password);
 
 
-    private RequestSpecification buildNbofViewRequestSpec(String pagePath, String user, String password) {
+        // Build time condition
+
+        Instant now = Instant.now();
+        Long minTime = now.minus(1, ChronoUnit.DAYS).toEpochMilli();
+        Long maxTime = now.plus(1, ChronoUnit.DAYS).toEpochMilli();
+        JSONObject timeConditionParameters = new JSONObject();
+        timeConditionParameters.put("propertyName", "timeStamp");
+        timeConditionParameters.put("comparisonOperator", "between");
+        timeConditionParameters.put("propertyValues", Arrays.asList(minTime, maxTime));
+
+        JSONObject timeCondition = new JSONObject();
+        timeCondition.put("type", "sessionPropertyCondition");
+        timeCondition.put("parameterValues", timeConditionParameters);
+
+        // build the subcondition list on which we can add more subcondition if required
+        ArrayList<JSONObject> subConditionList = new ArrayList<JSONObject>();
+        subConditionList.add(timeCondition);
+
+        // build scope condition
+
+
+        if (!scope.isEmpty()){
+
+            JSONObject scopeConditionParameters = new JSONObject();
+            scopeConditionParameters.put("propertyName", "scope");
+            scopeConditionParameters.put("comparisonOperator", "equals");
+            scopeConditionParameters.put("propertyValue", scope);
+
+            JSONObject scopeCondition = new JSONObject();
+            scopeCondition.put("type", "sessionPropertyCondition");
+            scopeCondition.put("parameterValues", scopeConditionParameters);
+
+            subConditionList.add(scopeCondition);
+        }
+
+        // build language condition
+
+        if (!lang.isEmpty()){
+
+            JSONObject languageConditionParameters = new JSONObject();
+            languageConditionParameters.put("propertyName", "properties.language");
+            languageConditionParameters.put("comparisonOperator", "equals");
+            languageConditionParameters.put("propertyValue", lang);
+
+            JSONObject languageCondition = new JSONObject();
+            languageCondition.put("type", "eventPropertyCondition");
+            languageCondition.put("parameterValues", languageConditionParameters);
+
+            subConditionList.add(languageCondition);
+        }
+
+        JSONObject parameterValuesCondition = new JSONObject();
+        parameterValuesCondition.put("operator", "and");
+        parameterValuesCondition.put("subConditions", subConditionList);
+
+        JSONObject condition = new JSONObject();
+        condition.put("type", "booleanCondition");
+        condition.put("parameterValues", parameterValuesCondition);
+
+        JSONObject query = new JSONObject();
+        query.put("condition", condition);
+
+        String requestBodyJson = query.toString();
+
+        RestRequestHelper reqHelper = new RestRequestHelper(unomiApiScenarioRuntimeData);
+        unomiApiScenarioRuntimeData.setResponse(reqHelper.sendRequest(req,
+                new URL(TestGlobalConfiguration.getUnomiUrl() + "/cxs/query/event/properties.keyword"),
+                requestBodyJson, HttpMethod.POST));
+
+        String response = this.unomiApiScenarioRuntimeData.getResponse().asString();
+        JSONObject responseJson = new JSONObject(response);
+        Iterator<String> keys = responseJson.keys();
+
+        String lookupKey = null;
+
+        while (keys.hasNext()) {
+            String key =  keys.next();
+            if (StringUtils.endsWith(key, keyword)) {
+                lookupKey = key;
+                break;
+            }
+        }
+
+        // When the page has never been seen, it is not displayed in the list of page views
+        return lookupKey !=null ? Integer.parseInt(responseJson.get(keyword).toString()) : 0;
+
+    }
+
+    private RequestSpecification buildNbofViewRequestSpec(String user, String password) {
         RequestSpecification req;
 
         RestRequestHelper reqHelper = new RestRequestHelper(unomiApiScenarioRuntimeData);
