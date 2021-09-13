@@ -129,4 +129,15 @@ public class EventSteps extends BaseSteps {
                 String.format("Nb of occurence should be %d, found: %d", expectedNb, newNbOccurenceForReferrer));
     }
 
+    @Given("The number of searches is {int} for keyword {string} in site {string} lang {string} by API with credentials {string} {string}")
+    public void the_number_of_searches_for_keyword(int expectedNb, String keyword,  String scope, String lang, String user,
+            String password) throws Throwable {
+        EventHelper eventHelper = new EventHelper(unomiApiScenarioRuntimeData);
+        int newNbOccurenceForKeyword = eventHelper.getNumberOfSearchesForKeyword(keyword,lang,scope,user,password);
+        Assert.assertEquals(newNbOccurenceForKeyword, expectedNb,
+                String.format("Nb of searches should be %d, found: %d", expectedNb, newNbOccurenceForKeyword));
+    }
+
+
+
 }
