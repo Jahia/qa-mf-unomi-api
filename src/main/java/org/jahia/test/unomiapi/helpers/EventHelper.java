@@ -107,7 +107,7 @@ public class EventHelper {
 
         while (keys.hasNext()) {
             String key =  keys.next();
-            if (StringUtils.endsWith(key, referrer)) {
+            if (StringUtils.contains(key, referrer)) {
                 lookupKey = key;
                 break;
             }
