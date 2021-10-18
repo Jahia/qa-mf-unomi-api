@@ -25,10 +25,14 @@ import io.restassured.http.Cookies;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RestRequestHelper {
 
     private UnomiApiScenarioRuntimeData unomiApiScenarioRuntimeData;
+
+    private static Logger logger = LoggerFactory.getLogger(RestRequestHelper.class);
 
     public RestRequestHelper(UnomiApiScenarioRuntimeData unomiApiScenarioRuntimeData) {
         this.unomiApiScenarioRuntimeData = unomiApiScenarioRuntimeData;
@@ -51,12 +55,8 @@ public class RestRequestHelper {
             // fos.close();
 
             writetoLogFile = new PrintStream(fos);
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error("Error while getting log file", e);
         }
         return writetoLogFile;
     }

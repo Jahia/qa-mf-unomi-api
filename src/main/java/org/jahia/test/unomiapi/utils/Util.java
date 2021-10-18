@@ -1,11 +1,16 @@
 package org.jahia.test.unomiapi.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Util {
+    private static Logger logger = LoggerFactory.getLogger(Util.class);
+
     public static void waitForMillis(int milliSeconds) {
         try {
             Thread.sleep(milliSeconds);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.error("Thread sleep error", e);
         }
     }
 
