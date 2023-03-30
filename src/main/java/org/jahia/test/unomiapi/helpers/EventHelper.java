@@ -1,7 +1,6 @@
 package org.jahia.test.unomiapi.helpers;
 
 import com.mashape.unirest.http.HttpMethod;
-import com.sun.media.jfxmedia.logging.Logger;
 import io.restassured.specification.RequestSpecification;
 import org.apache.commons.lang3.StringUtils;
 import org.jahia.test.unomiapi.data.TestGlobalConfiguration;
@@ -67,7 +66,6 @@ public class EventHelper {
                 lookupKey = key;
                 break;
             }
-            LOGGER.info("referrer key : " + key);
         }
 
         // When the page has never been seen, it is not displayed in the list of page views
@@ -116,7 +114,7 @@ public class EventHelper {
                 lookupKey = key;
                 break;
             }
-            Logger.logMsg(1, "referrer key : " + key);
+            LOGGER.info("referrer key : " + key);
         }
 
         // When the page has never been seen, it is not displayed in the list of page views
