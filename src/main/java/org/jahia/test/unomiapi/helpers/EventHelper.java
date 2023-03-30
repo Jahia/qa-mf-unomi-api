@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jahia.test.unomiapi.data.TestGlobalConfiguration;
 import org.jahia.test.unomiapi.data.UnomiApiScenarioRuntimeData;
 import org.json.JSONObject;
+import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.time.Instant;
@@ -15,6 +16,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 public class EventHelper {
+
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(EventHelper.class);
 
     private UnomiApiScenarioRuntimeData unomiApiScenarioRuntimeData;
 
@@ -111,6 +114,7 @@ public class EventHelper {
                 lookupKey = key;
                 break;
             }
+            LOGGER.info("referrer key : " + key);
         }
 
         // When the page has never been seen, it is not displayed in the list of page views
