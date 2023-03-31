@@ -110,11 +110,11 @@ public class EventHelper {
 
         while (keys.hasNext()) {
             String key =  keys.next();
+            LOGGER.info("looking for  : "+referrer+"; found referrer key : " + key);
             if (StringUtils.contains(key, referrer)) {
                 lookupKey = key;
                 break;
             }
-            LOGGER.info("referrer key : " + key);
         }
 
         // When the page has never been seen, it is not displayed in the list of page views
