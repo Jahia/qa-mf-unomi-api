@@ -199,7 +199,7 @@ public class EventHelper {
 
         RestRequestHelper reqHelper = new RestRequestHelper(unomiApiScenarioRuntimeData);
         unomiApiScenarioRuntimeData.setResponse(reqHelper.sendRequest(req,
-                new URL(TestGlobalConfiguration.getUnomiUrl() + "/cxs/query/event/properties.keyword"),
+                new URL(TestGlobalConfiguration.getUnomiUrl() + "/cxs/query/event/source.flattenedProperties.fields.src_terms%5B0%5D.term"),
                 requestBodyJson, HttpMethod.POST));
 
         String response = this.unomiApiScenarioRuntimeData.getResponse().asString();
