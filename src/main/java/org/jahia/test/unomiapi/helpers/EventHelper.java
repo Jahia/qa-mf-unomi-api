@@ -49,7 +49,8 @@ public class EventHelper {
 
         RestRequestHelper reqHelper = new RestRequestHelper(unomiApiScenarioRuntimeData);
         unomiApiScenarioRuntimeData.setResponse(reqHelper.sendRequest(req,
-                new URL(TestGlobalConfiguration.getUnomiUrl() + "/cxs/query/event/target.properties.pageInfo.destinationURL"),
+                new URL(TestGlobalConfiguration.getUnomiUrl() + "/cxs/query/event/target.properties.pageInfo"
+                        + ".destinationURL?optimizedQuery=true"),
                 requestBodyJson, HttpMethod.POST));
 
         String response = this.unomiApiScenarioRuntimeData.getResponse().asString();
@@ -97,7 +98,7 @@ public class EventHelper {
 
         RestRequestHelper reqHelper = new RestRequestHelper(unomiApiScenarioRuntimeData);
         unomiApiScenarioRuntimeData.setResponse(reqHelper.sendRequest(req,
-                new URL(TestGlobalConfiguration.getUnomiUrl() + "/cxs/query/event/target.properties.pageInfo.referringURL"),
+                new URL(TestGlobalConfiguration.getUnomiUrl() + "/cxs/query/event/target.properties.pageInfo.referringURL?optimizedQuery=true"),
                 requestBodyJson, HttpMethod.POST));
 
         String response = this.unomiApiScenarioRuntimeData.getResponse().asString();
